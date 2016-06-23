@@ -46,6 +46,9 @@ if ( ! class_exists('CCB_Shortcode') ) {
                     }
                 }
             }
+            if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 && ( empty( $local['output'] ) || strcmp( $local['output'], 'blob' ) == 0 ) ) {
+                $options .= 'onVideoCreated: function() { console.log("TEST TEST TEST"); },';
+            }
             $options = substr( $options, 0, -1 );
             $options .= '};';
             return $options;
@@ -74,7 +77,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
 
         public static function register_scripts() {
             $api_key = self::$settings['general']['field-apiKey'];
-            wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), '1.0' );
+            wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp_Button::VERSION );
         }
 
         /*

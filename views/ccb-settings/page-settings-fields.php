@@ -6,7 +6,7 @@
 
 <?php if ( 'ccb_field-apiKey' == $field['label_for'] ) : ?>
 
-	<input id="<?php esc_attr_e( 'ccb_settings[general][field-apiKey]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[general][field-apiKey]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['general']['field-apiKey'] ); ?>" />
+	<input id="<?php esc_attr_e( 'ccb_settings_general[api][field-apiKey]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[api][field-apiKey]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['api']['field-apiKey'] ); ?>" />
 	<p class="description">Don't have an API key? Get one <a href="https://clipchamp.com/pricing" target="_blank">here</a>.</p>
 
 <?php endif; ?>
@@ -19,13 +19,13 @@
 
 <?php if ( 'ccb_field-label' == $field['label_for'] ) : ?>
 
-	<input id="<?php esc_attr_e( 'ccb_settings[appearance][field-label]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-label]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-label'] ); ?>" />
+	<input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-label]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-label]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-label'] ); ?>" />
 	<p class="description">The Clipchamp button label. This is the text that appears in the button, which is placed into the wrapper element.</p>
 
 <?php endif; ?>
 
 <?php if ( 'ccb_field-size' == $field['label_for'] ) : ?>
-    <select id="<?php esc_attr_e( 'ccb_settings[appearance][field-size]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-size]' ); ?>">
+    <select id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-size]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-size]' ); ?>">
         <?php foreach ($default_sets['sizes'] as $size ) : ?>
             <option value="<?php esc_attr_e( $size ); ?>" <?php selected( $settings['appearance']['field-size'], $size ); ?>><?= $size; ?></option>
         <?php endforeach; ?>
@@ -36,14 +36,14 @@
 
 <?php if ( 'ccb_field-title' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-title]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-title]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-title'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-title]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-title]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-title'] ); ?>" />
     <p class="description">The title of the Clipchamp popup. This is the text that appears at the top of the popup iframe, which is shown after the user clicks the Clipchamp button.</p>
 
 <?php endif; ?>
 
 <?php if ( 'ccb_field-logo' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-logo]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-logo]' ); ?>" class="regular-text media-uploader" value="<?php esc_attr_e( $settings['appearance']['field-logo'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-logo]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-logo]' ); ?>" class="regular-text media-uploader" value="<?php esc_attr_e( $settings['appearance']['field-logo'] ); ?>" />
     <input id="upload-button" type="button" class="button" value="Choose Logo" />
     <p class="description">The URL of the logo image for the Clipchamp popup. This is an image that is shown in the top-left corner of the iframe.</p>
 
@@ -51,7 +51,7 @@
 
 <?php if ( 'ccb_field-color' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-color]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-color]' ); ?>" class="color-field" value="<?php esc_attr_e( $settings['appearance']['field-color'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-color]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-color]' ); ?>" class="color-field" value="<?php esc_attr_e( $settings['appearance']['field-color'] ); ?>" />
     <p class="description">Determines the color of the Clipchamp button the background of the popup's title bar and other graphical elements. Can be a color name (such as blue, a hex-encoded color code (such as <code>#3300cc</code>), or an RGB-encoded color (such as <code>rgba(78,24,212,0.5)</code>).</p>
 
 <?php endif; ?>
@@ -134,20 +134,69 @@
  */
 ?>
 
-<?php if ( strcmp( 's3', $settings['video']['field-output'] ) == 0 ) : ?>
+<?php if ( 'ccb_field-s3-bucket' == $field['label_for'] ) : ?>
 
-    <?php if ( 'ccb_field-s3-bucket' == $field['label_for'] ) : ?>
+    <input id="<?php esc_attr_e( 'ccb_settings[s3][field-s3-bucket]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[s3][field-s3-bucket]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['s3']['field-s3-bucket'] ); ?>" />
+    <p class="description">Target bucket for S3 upload. Value is required if uploading to S3.</p>
 
-        <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-s3-bucket]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-s3-bucket]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-s3-bucket'] ); ?>" />
-        <p class="description">The title of the Clipchamp popup. This is the text that appears at the top of the popup iframe, which is shown after the user clicks the Clipchamp button.</p>
+<?php endif; ?>
 
-    <?php endif; ?>
+<?php if ( 'ccb_field-s3-folder' == $field['label_for'] ) : ?>
 
-    <?php if ( 'ccb_field-s3-folder' == $field['label_for'] ) : ?>
+    <input id="<?php esc_attr_e( 'ccb_settings[s3][field-s3-folder]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[s3][field-s3-folder]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['s3']['field-s3-folder'] ); ?>" />
+    <p class="description">(Optional) Target folder for S3 upload. If specified, uploaded files will be placed in this folder, i.e. the S3 key will have this as a prefix.</p>
 
-        <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-s3-folder]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-s3-folder]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-s3-folder'] ); ?>" />
-        <p class="description">The title of the Clipchamp popup. This is the text that appears at the top of the popup iframe, which is shown after the user clicks the Clipchamp button.</p>
+<?php endif; ?>
 
-    <?php endif; ?>
+<?php
+/*
+ * Azure Section
+ */
+?>
+
+<?php if ( 'ccb_field-azure-container' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_settings[azure][field-azure-container]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[azure][field-azure-container]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['azure']['field-azure-container'] ); ?>" />
+    <p class="description">Target container for blob storage upload. Value is required if uploading to Azure.</p>
+
+<?php endif; ?>
+
+<?php if ( 'ccb_field-azure-folder' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_settings[azure][field-azure-folder]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[azure][field-azure-folder]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['azure']['field-azure-folder'] ); ?>" />
+    <p class="description">(Optional) Target folder for azure upload. If specified, uploaded files will be placed in this folder, i.e. the blob name will have this as a prefix.</p>
+
+<?php endif; ?>
+
+<?php
+/*
+ * Google Drive Section
+ */
+?>
+
+<?php if ( 'ccb_field-gdrive-folder' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_settings[gdrive][field-gdrive-folder]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[gdrive][field-gdrive-folder]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['gdrive']['field-gdrive-folder'] ); ?>" />
+    <p class="description">(Optional) Target folder for Google Drive upload. If specified, uploaded files will be placed in this folder. Relative to the globally configured root folder. If the folder doesn't exist, it will be created. Can be specified as a '/'-delimited path, or (e.g. if you have '/' in a folder name) using an array of strings. <strong>NOTE</strong>: We do cache the Google-assigned ID of the folder, which means if the folder is moved (or removed) we will continue uploading to it in its new location for some time.</p>
+
+<?php endif; ?>
+
+<?php
+/*
+ * Youtube Section
+ */
+?>
+
+<?php if ( 'ccb_field-youtube-title' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_settings[youtube][field-youtube-title]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[youtube][field-youtube-title]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['youtube']['field-youtube-title'] ); ?>" />
+    <p class="description">(Optional) Assign this title to the video when it is uploaded.</p>
+
+<?php endif; ?>
+
+<?php if ( 'ccb_field-youtube-description' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_settings[youtube][field-youtube-description]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[youtube][field-youtube-description]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['youtube']['field-youtube-description'] ); ?>" />
+    <p class="description">(Optional) Assign this description to the video when it is uploaded.</p>
 
 <?php endif; ?>
