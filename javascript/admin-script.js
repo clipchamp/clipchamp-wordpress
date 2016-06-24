@@ -17,6 +17,14 @@ function ccbWrapper( $ ) {
             $( '.color-field' ).wpColorPicker();
 
             ccb.registerEventHandlers();
+
+            $( '.conditional-settings' ).hide();
+            $(  '#' + $( '.output-select' ).val() + '_settings' ).show();
+
+            //TODO:Disable fields when API key is not set
+            if ( $( '#ccb_field-apiKey' ).val() == "" ) {
+                $( '#ccb_settings input' ).attr('disabled', true);
+            }
         },
 
         /**
@@ -24,6 +32,7 @@ function ccbWrapper( $ ) {
          */
         registerEventHandlers: function () {
             $( '#upload-button' ).click( ccb.initMediaUploader );
+            $( '.output-select' ).change( ccb.changeOutput );
         },
 
         /**
@@ -42,7 +51,10 @@ function ccbWrapper( $ ) {
                 button: {
                     text: 'Choose Logo'
                 },
-                multiple: false
+                multiple: false,
+                library: {
+                    type: 'image'
+                }
             } );
 
             ccb.mediaUploader.on( 'select', function() {
@@ -50,6 +62,12 @@ function ccbWrapper( $ ) {
                 $( '.media-uploader' ).val( attachment.url );
             } );
             ccb.mediaUploader.open();
+        },
+
+        changeOutput: function( event ) {
+            var output = $(event.target).val();
+            $( '.conditional-settings' ).hide();
+            $(  '#' + output + '_settings' ).show();
         }
     }; // end ccb
 

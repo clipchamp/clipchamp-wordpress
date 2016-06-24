@@ -93,7 +93,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
             $jsScript .= 'clipchamp(element' . self::$id . ', options' . self::$id . ');';
             wp_add_inline_script( self::SCRIPT_HANDLE, $jsScript );
 
-            return '<div id="clipchamp-button-' . self::$id++ . '" class="clipchamp-button"></div>';
+            return '<div id="clipchamp-button-' . self::$id++ . '" class="clipchamp-button"></div><p></p>';
         }
 
         public static function register_scripts() {

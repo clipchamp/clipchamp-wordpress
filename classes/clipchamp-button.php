@@ -70,14 +70,6 @@ if ( ! class_exists('Clipchamp_Button') ) {
 				'all'
 			);
 
-            wp_register_style(
-                self::PREFIX . 'button',
-                plugins_url( 'css/button.css', dirname( __FILE__ ) ),
-                array(),
-                self::VERSION,
-                'all'
-            );
-
 			if ( is_admin() ) {
                 wp_enqueue_media();
 				wp_enqueue_style( self::PREFIX . 'admin' );

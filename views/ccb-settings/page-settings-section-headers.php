@@ -4,7 +4,7 @@
 
 <?php elseif ( 'ccb_section-appearance' == $section['id'] ) : ?>
 
-	<p>Customize the appearance of the Clipchamp button.</p>
+	<p>Customize the appearance of the Clipchamp button and popup.</p>
 
 <?php elseif ( 'ccb_section-video' == $section['id'] ) : ?>
 

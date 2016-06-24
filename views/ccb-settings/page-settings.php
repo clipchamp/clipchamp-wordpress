@@ -1,14 +1,47 @@
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br /></div>
+    <img src="<?php echo plugin_dir_path( 'images/logo.svg' ) ?>" />
 	<h1><?php esc_html_e( CCB_NAME ); ?> Settings</h1>
 
 	<p>Include the button using the following shortcode: <code>[clipchamp]</code></p>
 
 	<p>For more information refer to our <a href="https://clipchamp.com/forgeeks" target="_blank">documentation</a>.</p>
 
-	<form method="post" action="options.php">
+    <?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'appearance_settings'; ?>
+
+	<form id="ccb_settings" method="post" action="options.php">
 		<?php settings_fields( 'ccb_settings' ); ?>
 		<?php do_settings_sections( 'ccb_settings' ); ?>
+
+        <h2 class="nav-tab-wrapper">
+            <a href="?page=ccb_settings&tab=appearance_settings" class="nav-tab <?php echo $active_tab == 'appearance_settings' ? 'nav-tab-active' : ''; ?>">Appearance</a>
+            <a href="?page=ccb_settings&tab=video_settings" class="nav-tab <?php echo $active_tab == 'video_settings' ? 'nav-tab-active' : ''; ?>">Video</a>
+            <a href="?page=ccb_settings&tab=behaviour_settings" class="nav-tab <?php echo $active_tab == 'behaviour_settings' ? 'nav-tab-active' : ''; ?>">Behaviour</a>
+        </h2>
+
+        <?php if ( strcmp( $active_tab, 'appearance_settings' ) == 0 ) : ?>
+            <?php do_settings_sections( 'ccb_settings_appearance' ); ?>
+        <?php endif; ?>
+
+        <?php if ( strcmp( $active_tab, 'video_settings' ) == 0 ) : ?>
+            <?php do_settings_sections( 'ccb_settings_video' ); ?>
+            <div id="s3_settings" class="conditional-settings">
+                <?php do_settings_sections( 'ccb_settings_s3' ); ?>
+            </div>
+            <div id="azure_settings" class="conditional-settings">
+                <?php do_settings_sections( 'ccb_settings_azure' ); ?>
+            </div>
+            <div id="youtube_settings" class="conditional-settings">
+                <?php do_settings_sections( 'ccb_settings_youtube' ); ?>
+            </div>
+            <div id="gdrive_settings" class="conditional-settings">
+                <?php do_settings_sections( 'ccb_settings_gdrive' ); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( strcmp( $active_tab, 'behaviour_settings' ) == 0 ) : ?>
+            <?php do_settings_sections( 'ccb_settings_behaviour' ); ?>
+        <?php endif; ?>
 
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />

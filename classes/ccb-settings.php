@@ -7,18 +7,42 @@ if ( ! class_exists('CCB_Settings') ) {
 	 */
 	class CCB_Settings extends CCB_Module {
 		protected $settings;
-		protected static $default_settings;
 		protected static $readable_properties	= array( 'settings' );
 		protected static $writeable_properties	= array( 'settings' );
-		//TODO: Populate this from apiUtils.js
+        protected static $default_settings;
+        //TODO: Populate this from apiUtils.js
 		protected static $default_sets			= array(
 			'sizes'			=> array( 'tiny', 'small', 'medium', 'large' ),
 			'presets'		=> array( 'web', 'mobile', 'windows', 'animation' ),
 			'formats'		=> array( 'mp4', 'flv', 'webm', 'asf', 'gif' ),
 			'resolutions'	=> array( 'keep', '240p', '360p', '480p', '720p', '1080p', '320w', '640w' ),
 			'compressions'	=> array( 'min', 'low', 'medium', 'high', 'max' ),
-			'inputs'		=> array( 'file', 'camera' ),
-			'outputs'		=> array( 'blob', 'azure', 's3', 'youtube', 'gdrive' )
+			'inputs'		=> array(
+                'file'				            => 'Upload File',
+                'camera' 			            => 'Record Camera'
+			),
+			'outputs'		=> array(
+                'blob'	                        => 'WordPress Media Library',
+                'azure'		                    => 'Microsoft Azure',
+                's3'		                    => 'Amazon S3',
+                'youtube'	                    => 'Youtube',
+                'gdrive'	                    => 'Google Drive'
+			),
+			'enable'		=> array(
+                'batch'			                => 'Allow batch upload',
+                'mobile-webcam-format-fallback' => 'Mobile webcam format fallback',
+                'no-branding'                   => 'No branding',
+                'no-error-bypass'               => 'No error bypass',
+                'no-hidden-run'                 => 'Disable background upload',
+                'no-popout'                     => 'Disable poput fallback',
+                'no-probe-reject'               => 'Accept all input files',
+                'no-thank-you'                  => 'Disable thank you screen'
+			),
+			'experimental'	=> array(
+                'force-popout'	                => 'Always launch UI in separate popout window',
+                'overlong-recording'		    => 'Allow recording without timely limitation',
+                'h264-hardware-acceleration'	=> 'Enable hardware-accelerated H.264 encoding'
+			)
 		);
 
 		const REQUIRED_CAPABILITY = 'administrator';
@@ -146,26 +170,34 @@ if ( ! class_exists('CCB_Settings') ) {
 		 * @return array
 		 */
 		protected static function get_default_settings() {
-			$general = array(
+			$api = array(
 				'field-apiKey' 				=> null
 			);
 
 			$appearance = array(
 				'field-label'				=> 'Upload with Clipchamp!',
-				'field-size'				=> self::$default_sets['sizes'][0],
+				'field-size'				=> self::$default_sets['sizes'][1],
 				'field-title'				=> 'Ye\' olde video-upload shoppe',
 				'field-logo'				=> 'https://api.clipchamp.com/static/button/images/logo.svg',
 				'field-color'				=> '#4c3770'
 			);
+
+            $inputs = array_keys( self::$default_sets['inputs'] );
+            $outputs = array_keys( self::$default_sets['outputs'] );
 
 			$video = array(
 				'field-preset'				=> self::$default_sets['presets'][0],
 				'field-format'				=> self::$default_sets['formats'][0],
 				'field-resolution'			=> self::$default_sets['resolutions'][0],
 				'field-compression'			=> self::$default_sets['compressions'][2],
-				'field-input'				=> self::$default_sets['inputs'],
-				'field-output'				=> array( self::$default_sets['outputs'][0] )
+				'field-inputs'				=> array( $inputs[0], $inputs[1] ),
+				'field-output'				=> $outputs[3]
 			);
+
+            $behaviour = array(
+                'field-enable'              => array(),
+                'field-experimental'        => array()
+            );
 
 			$s3 = array(
 				'field-s3-bucket'			=> '',
@@ -188,9 +220,10 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			return array(
 				'db-version' 	=> '0',
-				'general'      	=> $general,
+				'general'      	=> $api,
 				'appearance'	=> $appearance,
 				'video'   		=> $video,
+                'behaviour'     => $behaviour,
 				's3'			=> $s3,
 				'azure'			=> $azure,
 				'gdrive'		=> $gdrive,
@@ -288,52 +321,52 @@ if ( ! class_exists('CCB_Settings') ) {
 			 */
 			add_settings_section(
 				'ccb_section-appearance',
-				'Button Appearance Settings',
+				'',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_appearance'
 			);
 
 			add_settings_field(
 				'ccb_field-label',
-				'Label',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Button Label*',
+				array( $this, 'markup_appearance_fields' ),
+				'ccb_settings_appearance',
 				'ccb_section-appearance',
 				array( 'label_for' => 'ccb_field-label' )
 			);
 
 			add_settings_field(
 				'ccb_field-size',
-				'Size',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Button Size*',
+				array( $this, 'markup_appearance_fields' ),
+				'ccb_settings_appearance',
 				'ccb_section-appearance',
 				array( 'label_for' => 'ccb_field-size' )
 			);
 
 			add_settings_field(
 				'ccb_field-title',
-				'Title',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Popup Title*',
+				array( $this, 'markup_appearance_fields' ),
+				'ccb_settings_appearance',
 				'ccb_section-appearance',
 				array( 'label_for' => 'ccb_field-title' )
 			);
 
 			add_settings_field(
 				'ccb_field-logo',
-				'Logo',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Popup Logo*',
+				array( $this, 'markup_appearance_fields' ),
+				'ccb_settings_appearance',
 				'ccb_section-appearance',
 				array( 'label_for' => 'ccb_field-logo' )
 			);
 
 			add_settings_field(
 				'ccb_field-color',
-				'Color',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Primary Color*',
+				array( $this, 'markup_appearance_fields' ),
+				'ccb_settings_appearance',
 				'ccb_section-appearance',
 				array( 'label_for' => 'ccb_field-color' )
 			);
@@ -345,14 +378,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-video',
 				'Video Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_video'
 			);
 
 			add_settings_field(
 				'ccb_field-preset',
 				'Preset',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-preset' )
 			);
@@ -360,8 +393,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-format',
 				'Format',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-format' )
 			);
@@ -369,8 +402,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-resolution',
 				'Resolution',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-resolution' )
 			);
@@ -378,8 +411,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-compression',
 				'Compression',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-compression' )
 			);
@@ -387,8 +420,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-inputs',
 				'Inputs',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-inputs' )
 			);
@@ -396,8 +429,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-output',
 				'Output',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-output' )
 			);
@@ -409,14 +442,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-s3',
 				'S3 Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_s3'
 			);
 
 			add_settings_field(
 				'ccb_field-s3-bucket',
-				'S3 Bucket',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'S3 Bucket*',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_s3',
 				'ccb_section-s3',
 				array( 'label_for' => 'ccb_field-s3-bucket' )
 			);
@@ -424,8 +457,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-s3-folder',
 				'S3 Folder',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_s3',
 				'ccb_section-s3',
 				array( 'label_for' => 'ccb_field-s3-folder' )
 			);
@@ -437,14 +470,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-azure',
 				'Azure Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_azure'
 			);
 
 			add_settings_field(
 				'ccb_field-azure-container',
-				'Azure Container',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				'Azure Container*',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_azure',
 				'ccb_section-azure',
 				array( 'label_for' => 'ccb_field-azure-container' )
 			);
@@ -452,8 +485,8 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-azure-folder',
 				'Azure Folder',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_azure',
 				'ccb_section-azure',
 				array( 'label_for' => 'ccb_field-azure-folder' )
 			);
@@ -465,14 +498,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-gdrive',
 				'Google Drive Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_gdrive'
 			);
 
 			add_settings_field(
 				'ccb_field-gdrive-folder',
 				'Google Drive Folder',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_gdrive',
 				'ccb_section-gdrive',
 				array( 'label_for' => 'ccb_field-gdrive-folder' )
 			);
@@ -484,14 +517,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-youtube',
 				'Youtube Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings'
+				'ccb_settings_youtube'
 			);
 
 			add_settings_field(
 				'ccb_field-youtube-title',
 				'Youtube Title',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_youtube',
 				'ccb_section-youtube',
 				array( 'label_for' => 'ccb_field-youtube-title' )
 			);
@@ -499,12 +532,81 @@ if ( ! class_exists('CCB_Settings') ) {
 			add_settings_field(
 				'ccb_field-youtube-description',
 				'Youtube Description',
-				array( $this, 'markup_fields' ),
-				'ccb_settings',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_youtube',
 				'ccb_section-youtube',
 				array( 'label_for' => 'ccb_field-youtube-description' )
 			);
 
+			/*
+			 * Behaviour Section
+			 */
+			add_settings_section(
+				'ccb_section-behaviour',
+				'',
+				__CLASS__ . '::markup_section_headers',
+				'ccb_settings_behaviour'
+			);
+
+			add_settings_field(
+				'ccb_field-enable',
+				'Special Behaviour',
+				array( $this, 'markup_behaviour_fields' ),
+				'ccb_settings_behaviour',
+				'ccb_section-behaviour',
+				array( 'label_for' => 'ccb_field-enable' )
+			);
+
+			add_settings_field(
+				'ccb_field-experimental',
+				'Experimental Features',
+				array( $this, 'markup_behaviour_fields' ),
+				'ccb_settings_behaviour',
+				'ccb_section-behaviour',
+				array( 'label_for' => 'ccb_field-experimental' )
+			);
+
+            register_setting(
+                'ccb_settings_appearance',
+                'ccb_settings_appearance',
+                array( $this, 'validate_settings' )
+            );
+
+            register_setting(
+                'ccb_settings_video',
+                'ccb_settings_video',
+                array( $this, 'validate_settings' )
+            );
+
+			register_setting(
+				'ccb_settings_s3',
+				'ccb_settings_s3',
+				array( $this, 'validate_settings' )
+			);
+
+			register_setting(
+				'ccb_settings_azure',
+				'ccb_settings_azure',
+				array( $this, 'validate_settings' )
+			);
+
+			register_setting(
+				'ccb_settings_youtube',
+				'ccb_settings_youtube',
+				array( $this, 'validate_settings' )
+			);
+
+			register_setting(
+				'ccb_settings_gdrive',
+				'ccb_settings_gdrive',
+				array( $this, 'validate_settings' )
+			);
+
+            register_setting(
+                'ccb_settings_behaviour',
+                'ccb_settings_behaviour',
+                array( $this, 'validate_settings' )
+            );
 
 			// The settings container
 			register_setting(
@@ -539,8 +641,73 @@ if ( ! class_exists('CCB_Settings') ) {
 					break;
 			}
 
-			echo self::render_template( 'ccb-settings/page-settings-fields.php', array( 'settings' => $this->settings, 'field' => $field, 'default_sets' => self::$default_sets ), 'always' );
+			echo self::render_template(
+			    'ccb-settings/page-settings-fields.php',
+                array(
+                    'settings' => $this->settings,
+                    'field' => $field,
+                    'default_sets' => self::$default_sets
+                ),
+                'always'
+            );
 		}
+
+        /**
+         * Delivers the markup for appearance settings fields
+         *
+         * @mvc Controller
+         *
+         * @param array $field
+         */
+        public function markup_appearance_fields( $field ) {
+            echo self::render_template(
+                'ccb-settings/fields/appearance.php',
+                array(
+                    'settings' => $this->settings['appearance'],
+                    'field' => $field,
+                    'default_sets' => self::$default_sets
+                ),
+                'always'
+            );
+        }
+
+        /**
+         * Delivers the markup for video settings fields
+         *
+         * @mvc Controller
+         *
+         * @param array $field
+         */
+        public function markup_video_fields( $field ) {
+            echo self::render_template(
+                'ccb-settings/fields/video.php',
+                array(
+                    'settings' => $this->settings['video'],
+                    'field' => $field,
+                    'default_sets' => self::$default_sets
+                ),
+                'always'
+            );
+        }
+
+        /**
+         * Delivers the markup for behaviour settings fields
+         *
+         * @mvc Controller
+         *
+         * @param array $field
+         */
+        public function markup_behaviour_fields( $field ) {
+            echo self::render_template(
+                'ccb-settings/fields/behaviour.php',
+                array(
+                    'settings' => $this->settings['behaviour'],
+                    'field' => $field,
+                    'default_sets' => self::$default_sets
+                ),
+                'always'
+            );
+        }
 
 		/**
 		 * Validates submitted setting values before they get saved to the database. Invalid data will be overwritten with defaults.
@@ -618,12 +785,12 @@ if ( ! class_exists('CCB_Settings') ) {
 				$new_settings['video']['field-compression'] = empty( $this->settings['video']['field-compression'] ) ? self::$default_settings['video']['field-compression'] : $this->settings['video']['field-compression'];
 			}
 
-			if ( empty( array_intersect( $new_settings['video']['field-inputs'], self::$default_sets['inputs'] ) ) ) {
+			if ( empty( array_intersect( $new_settings['video']['field-inputs'], array_keys( self::$default_sets['inputs'] ) ) ) ) {
 				add_notice( 'Invalid value for inputs', 'error' );
 				$new_settings['video']['field-inputs'] = empty( $this->settings['video']['field-inputs'] ) ? self::$default_settings['video']['field-inputs'] : $this->settings['video']['field-inputs'];
 			}
 
-			if ( !in_array( $new_settings['video']['field-output'], self::$default_sets['outputs'] ) ) {
+			if ( !in_array( $new_settings['video']['field-output'], array_keys( self::$default_sets['outputs'] ) ) ) {
 				add_notice( 'Invalid value for output', 'error' );
 				$new_settings['video']['field-output'] = empty( $this->settings['video']['field-output'] ) ? self::$default_settings['video']['field-output'] : $this->settings['video']['field-output'];
 			}
