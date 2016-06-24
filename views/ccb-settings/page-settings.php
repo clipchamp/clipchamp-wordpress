@@ -6,26 +6,9 @@
 
 	<p>For more information refer to our <a href="https://clipchamp.com/forgeeks" target="_blank">documentation</a>.</p>
 
-	<?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'general_settings'; ?>
-
-	<h2 class="nav-tab-wrapper">
-		<a href="?page=ccb_settings&tab=general_settings" class="nav-tab <?php echo $active_tab == 'general_settings' ? 'nav-tab-active' : ''; ?>">General Settings</a>
-		<a href="?page=ccb_settings&tab=video_settings" class="nav-tab <?php echo $active_tab == 'video_settings' ? 'nav-tab-active' : ''; ?>">Video Settings</a>
-	</h2>
-
 	<form method="post" action="options.php">
-
-		<?php if ( $active_tab == 'general_settings' ) : ?>
-
-			<?php settings_fields( 'ccb_settings_general' ); ?>
-			<?php do_settings_sections( 'ccb_settings_general' ); ?>
-
-		<?php else : ?>
-
-			<?php settings_fields( 'ccb_settings_video' ); ?>
-			<?php do_settings_sections( 'ccb_settings_video' ); ?>
-
-		<?php endif; ?>
+		<?php settings_fields( 'ccb_settings' ); ?>
+		<?php do_settings_sections( 'ccb_settings' ); ?>
 
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />

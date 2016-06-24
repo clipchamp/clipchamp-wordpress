@@ -5,14 +5,17 @@ if ( ! class_exists('CCB_Shortcode') ) {
     class CCB_Shortcode extends CCB_Module {
 
         protected static $id                    = 1;
+        protected static $ajax_init             = false;
         protected static $settings;
         protected static $readable_properties	= array( 'id', 'settings' );
         protected static $writeable_properties	= array( 'id' );
 
         const SHORTCODE_TAG     = 'clipchamp';
         const SCRIPT_HANDLE     = 'clipchamp-button';
+        //TODO:Change to production URL
         const SCRIPT_BASE_URL   = 'http://localhost:8080/';
         const SCRIPT_FILE_NAME  = 'button.js';
+        const ON_VIDEO_CREATED  = 'ccbUploadVideo';
 
         /*
 		 * General methods
@@ -31,7 +34,16 @@ if ( ! class_exists('CCB_Shortcode') ) {
          * Static methods
          */
 
+        /**
+         * Creates options for the Clipchamp API
+         *
+         * @mvc Controller
+         *
+         * @param array $local
+         * @return string
+         */
         protected static function create_button_options( $local ) {
+            //TODO:Improve
             $options = 'var options' . self::$id . ' = {';
             foreach ( self::$settings as $section ) {
                 if ( !is_array( $section ) ) {
@@ -47,7 +59,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
                 }
             }
             if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 && ( empty( $local['output'] ) || strcmp( $local['output'], 'blob' ) == 0 ) ) {
-                $options .= 'onVideoCreated: function() { console.log("TEST TEST TEST"); },';
+                $options .= 'onVideoCreated: ' . self::ON_VIDEO_CREATED . ',';
             }
             $options = substr( $options, 0, -1 );
             $options .= '};';
@@ -64,7 +76,16 @@ if ( ! class_exists('CCB_Shortcode') ) {
          */
         public static function render_shortcode( $attributes ) {
             wp_enqueue_script( self::SCRIPT_HANDLE );
+            if ( !self::$ajax_init ) {
+                wp_localize_script(
+                    self::SCRIPT_HANDLE,
+                    'ccb_ajax',
+                    array( 'ajax_url' => admin_url( 'admin-ajax.php' ) )
+                );
+                self::$ajax_init = true;
+            }
 
+            //TODO:Validate attributes
             $attributes = apply_filters( 'ccb_shortcode-attributes', $attributes );
 
             $jsScript = self::create_button_options( $attributes );

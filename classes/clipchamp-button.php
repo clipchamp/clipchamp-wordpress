@@ -57,7 +57,7 @@ if ( ! class_exists('Clipchamp_Button') ) {
             wp_register_script(
                 self::PREFIX . 'admin-script',
                 plugins_url( 'javascript/admin-script.js', dirname( __FILE__ ) ),
-                array( 'wp-color-picker' ),
+                array( 'wp-color-picker', 'jquery' ),
                 self::VERSION,
                 true
             );
@@ -239,8 +239,38 @@ if ( ! class_exists('Clipchamp_Button') ) {
 	} // end Clipchamp_Button
 }
 
-function cc_mime_types($mimes) {
-    $mimes['svg'] = 'image/svg+xml';
-    return $mimes;
+add_action( 'wp_ajax_ccb_upload', 'ccb_upload' );
+add_action( 'wp_ajax_nopriv_ccb_upload', 'ccb_upload' );
+
+function ccb_upload() {
+	if ( ! function_exists( 'wp_handle_upload' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	}
+
+	$upload_overrides = array( 'test_form' => false );
+
+	if ( ! empty( $_FILES['video']['name'] ) ) {
+		//TODO:Change upload dir
+		$video = wp_handle_upload( $_FILES['video'], $upload_overrides );
+	}
+
+	if ( $video && ! isset( $video['error'] ) ) {
+
+		$attachment = array(
+			'guid'           => $video['url'],
+			'post_mime_type' => $video['type'],
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $video['file'] ) ),
+			'post_content'   => '',
+			'post_status'    => 'inherit'
+		);
+
+		$attach_id = wp_insert_attachment( $attachment, $video['file'], 0 );
+
+		echo $attach_id;
+
+	} else {
+		echo $video['error'];
+	}
+
+	wp_die();
 }
-add_filter('upload_mimes', 'cc_mime_types');

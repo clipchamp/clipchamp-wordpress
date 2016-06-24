@@ -6,7 +6,7 @@
 
 <?php if ( 'ccb_field-apiKey' == $field['label_for'] ) : ?>
 
-	<input id="<?php esc_attr_e( 'ccb_settings_general[api][field-apiKey]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[api][field-apiKey]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['api']['field-apiKey'] ); ?>" />
+	<input id="<?php esc_attr_e( 'ccb_settings[general][field-apiKey]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[general][field-apiKey]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['general']['field-apiKey'] ); ?>" />
 	<p class="description">Don't have an API key? Get one <a href="https://clipchamp.com/pricing" target="_blank">here</a>.</p>
 
 <?php endif; ?>
@@ -19,13 +19,13 @@
 
 <?php if ( 'ccb_field-label' == $field['label_for'] ) : ?>
 
-	<input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-label]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-label]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-label'] ); ?>" />
+	<input id="<?php esc_attr_e( 'ccb_settings[appearance][field-label]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-label]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-label'] ); ?>" />
 	<p class="description">The Clipchamp button label. This is the text that appears in the button, which is placed into the wrapper element.</p>
 
 <?php endif; ?>
 
 <?php if ( 'ccb_field-size' == $field['label_for'] ) : ?>
-    <select id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-size]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-size]' ); ?>">
+    <select id="<?php esc_attr_e( 'ccb_settings[appearance][field-size]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-size]' ); ?>">
         <?php foreach ($default_sets['sizes'] as $size ) : ?>
             <option value="<?php esc_attr_e( $size ); ?>" <?php selected( $settings['appearance']['field-size'], $size ); ?>><?= $size; ?></option>
         <?php endforeach; ?>
@@ -36,14 +36,14 @@
 
 <?php if ( 'ccb_field-title' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-title]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-title]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-title'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-title]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-title]' ); ?>" class="regular-text" value="<?php esc_attr_e( $settings['appearance']['field-title'] ); ?>" />
     <p class="description">The title of the Clipchamp popup. This is the text that appears at the top of the popup iframe, which is shown after the user clicks the Clipchamp button.</p>
 
 <?php endif; ?>
 
 <?php if ( 'ccb_field-logo' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-logo]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-logo]' ); ?>" class="regular-text media-uploader" value="<?php esc_attr_e( $settings['appearance']['field-logo'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-logo]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-logo]' ); ?>" class="regular-text media-uploader" value="<?php esc_attr_e( $settings['appearance']['field-logo'] ); ?>" />
     <input id="upload-button" type="button" class="button" value="Choose Logo" />
     <p class="description">The URL of the logo image for the Clipchamp popup. This is an image that is shown in the top-left corner of the iframe.</p>
 
@@ -51,7 +51,7 @@
 
 <?php if ( 'ccb_field-color' == $field['label_for'] ) : ?>
 
-    <input id="<?php esc_attr_e( 'ccb_settings_general[appearance][field-color]' ); ?>" name="<?php esc_attr_e( 'ccb_settings_general[appearance][field-color]' ); ?>" class="color-field" value="<?php esc_attr_e( $settings['appearance']['field-color'] ); ?>" />
+    <input id="<?php esc_attr_e( 'ccb_settings[appearance][field-color]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[appearance][field-color]' ); ?>" class="color-field" value="<?php esc_attr_e( $settings['appearance']['field-color'] ); ?>" />
     <p class="description">Determines the color of the Clipchamp button the background of the popup's title bar and other graphical elements. Can be a color name (such as blue, a hex-encoded color code (such as <code>#3300cc</code>), or an RGB-encoded color (such as <code>rgba(78,24,212,0.5)</code>).</p>
 
 <?php endif; ?>
@@ -106,11 +106,11 @@
 
 <?php endif; ?>
 
-<?php if ( 'ccb_field-input' == $field['label_for'] ) : ?>
+<?php if ( 'ccb_field-inputs' == $field['label_for'] ) : ?>
 
-    <select id="<?php esc_attr_e( 'ccb_settings[video][field-input]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[video][field-input][]' ); ?>" multiple>
+    <select id="<?php esc_attr_e( 'ccb_settings[video][field-inputs]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[video][field-inputs][]' ); ?>" multiple>
         <?php foreach ($default_sets['inputs'] as $input ) : ?>
-            <option value="<?php esc_attr_e( $input ); ?>" <?php selected( true, in_array( $input, $settings['video']['field-input'] ) ); ?>><?= $input; ?></option>
+            <option value="<?php esc_attr_e( $input ); ?>" <?php selected( true, in_array( $input, $settings['video']['field-inputs'] ) ); ?>><?= $input; ?></option>
         <?php endforeach; ?>
     </select>
     <p class="description">The sources the user can pick an input video from, namely her webcam and her computer's file system.</p>
@@ -119,12 +119,17 @@
 
 <?php if ( 'ccb_field-output' == $field['label_for'] ) : ?>
 
+    <?php //TODO:Notify user of special conditions ?>
     <select id="<?php esc_attr_e( 'ccb_settings[video][field-output]' ); ?>" name="<?php esc_attr_e( 'ccb_settings[video][field-output]' ); ?>">
         <?php foreach ($default_sets['outputs'] as $output ) : ?>
             <option value="<?php esc_attr_e( $output ); ?>" <?php selected( $settings['video']['field-output'], $output ); ?>><?php echo strcmp( $output, 'blob' ) == 0 ? esc_attr( 'WordPress Media Library' ) : $output; ?></option>
         <?php endforeach; ?>
     </select>
     <p class="description">The destinations where we will make the output video available or upload to. If "blob" is chosen, we provide the output video as a <code>Blob</code> to your client-side Javascript code. If you select "youtube", "azure" or "s3", you need to authorize us to upload the video into the appropriate account from the subscription configuration page.</p>
+    <?php if ( strcmp( $settings['video']['field-output'], 'blob' ) == 0 ) : ?>
+        <p>Upload Max Filesize: <code><?php echo ini_get( 'upload_max_filesize' ); ?></code></p>
+        <p>Post Max Size: <code><?php echo ini_get( 'post_max_size' ); ?></code></p>
+    <?php endif; ?>
 
 <?php endif; ?>
 

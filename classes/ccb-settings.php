@@ -385,12 +385,12 @@ if ( ! class_exists('CCB_Settings') ) {
 			);
 
 			add_settings_field(
-				'ccb_field-input',
-				'Input',
+				'ccb_field-inputs',
+				'Inputs',
 				array( $this, 'markup_fields' ),
 				'ccb_settings',
 				'ccb_section-video',
-				array( 'label_for' => 'ccb_field-input' )
+				array( 'label_for' => 'ccb_field-inputs' )
 			);
 
 			add_settings_field(
@@ -425,7 +425,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_field-s3-folder',
 				'S3 Folder',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-s3',
 				array( 'label_for' => 'ccb_field-s3-folder' )
 			);
@@ -437,14 +437,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-azure',
 				'Azure Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings_video'
+				'ccb_settings'
 			);
 
 			add_settings_field(
 				'ccb_field-azure-container',
 				'Azure Container',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-azure',
 				array( 'label_for' => 'ccb_field-azure-container' )
 			);
@@ -453,7 +453,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_field-azure-folder',
 				'Azure Folder',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-azure',
 				array( 'label_for' => 'ccb_field-azure-folder' )
 			);
@@ -465,14 +465,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-gdrive',
 				'Google Drive Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings_video'
+				'ccb_settings'
 			);
 
 			add_settings_field(
 				'ccb_field-gdrive-folder',
 				'Google Drive Folder',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-gdrive',
 				array( 'label_for' => 'ccb_field-gdrive-folder' )
 			);
@@ -484,14 +484,14 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_section-youtube',
 				'Youtube Settings',
 				__CLASS__ . '::markup_section_headers',
-				'ccb_settings_video'
+				'ccb_settings'
 			);
 
 			add_settings_field(
 				'ccb_field-youtube-title',
 				'Youtube Title',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-youtube',
 				array( 'label_for' => 'ccb_field-youtube-title' )
 			);
@@ -500,20 +500,16 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_field-youtube-description',
 				'Youtube Description',
 				array( $this, 'markup_fields' ),
-				'ccb_settings_video',
+				'ccb_settings',
 				'ccb_section-youtube',
 				array( 'label_for' => 'ccb_field-youtube-description' )
 			);
 
+
 			// The settings container
 			register_setting(
-				'ccb_settings_general',
-				'ccb_settings_general',
-				array( $this, 'validate_settings' )
-			);
-			register_setting(
-				'ccb_settings_video',
-				'ccb_settings_video',
+				'ccb_settings',
+				'ccb_settings',
 				array( $this, 'validate_settings' )
 			);
 		}
@@ -574,7 +570,7 @@ if ( ! class_exists('CCB_Settings') ) {
 			 */
 			if ( empty( $new_settings['appearance']['field-label'] ) ) {
 				add_notice( 'Label cannot be empty', 'error' );
-				$new_settings['appearance']['field-label'] = empty( $this->settings['appearance']['field-label'] ) ? self::$default_settings['appearance']['field-label'] : $this->settings['appearance']['field-label'];
+				$new_settings['appearance']['field-label'] = empty( $this->settings['appearance']['field-label'] ) ? self::$default_settings['general']['field-label'] : $this->settings['appearance']['field-label'];
 			}
 
 			if ( !in_array( $new_settings['appearance']['field-size'], self::$default_sets['sizes'] ) ) {
@@ -584,19 +580,19 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			if ( empty( $new_settings['appearance']['field-title'] ) ) {
 				add_notice( 'Title cannot be empty', 'error' );
-				$new_settings['appearance']['field-title'] = empty( $this->settings['appearance']['field-title'] ) ? self::$default_settings['appearance']['field-title'] : $this->settings['appearance']['field-title'];
+				$new_settings['appearance']['field-title'] = empty( $this->settings['appearance']['field-title'] ) ? self::$default_settings['general']['field-title'] : $this->settings['appearance']['field-title'];
 			}
 
 			//TODO: Check for URL
 			if ( empty( $new_settings['appearance']['field-logo'] ) ) {
 				add_notice( 'Logo cannot be empty', 'error' );
-				$new_settings['appearance']['field-logo'] = empty( $this->settings['appearance']['field-logo'] ) ? self::$default_settings['appearance']['field-logo'] : $this->settings['appearance']['field-logo'];
+				$new_settings['appearance']['field-logo'] = empty( $this->settings['appearance']['field-logo'] ) ? self::$default_settings['general']['field-logo'] : $this->settings['appearance']['field-logo'];
 			}
 
 			//TODO: Check for color
 			if ( empty( $new_settings['appearance']['field-color'] ) ) {
 				add_notice( 'Color cannot be empty', 'error' );
-				$new_settings['appearance']['field-color'] = empty( $this->settings['appearance']['field-color'] ) ? self::$default_settings['appearance']['field-color'] : $this->settings['appearance']['field-color'];
+				$new_settings['appearance']['field-color'] = empty( $this->settings['appearance']['field-color'] ) ? self::$default_settings['general']['field-color'] : $this->settings['appearance']['field-color'];
 			}
 
 			/*
@@ -622,9 +618,9 @@ if ( ! class_exists('CCB_Settings') ) {
 				$new_settings['video']['field-compression'] = empty( $this->settings['video']['field-compression'] ) ? self::$default_settings['video']['field-compression'] : $this->settings['video']['field-compression'];
 			}
 
-			if ( empty( array_intersect( $new_settings['video']['field-input'], self::$default_sets['inputs'] ) ) ) {
-				add_notice( 'Invalid value for input', 'error' );
-				$new_settings['video']['field-input'] = empty( $this->settings['video']['field-input'] ) ? self::$default_settings['video']['field-input'] : $this->settings['video']['field-input'];
+			if ( empty( array_intersect( $new_settings['video']['field-inputs'], self::$default_sets['inputs'] ) ) ) {
+				add_notice( 'Invalid value for inputs', 'error' );
+				$new_settings['video']['field-inputs'] = empty( $this->settings['video']['field-inputs'] ) ? self::$default_settings['video']['field-inputs'] : $this->settings['video']['field-inputs'];
 			}
 
 			if ( !in_array( $new_settings['video']['field-output'], self::$default_sets['outputs'] ) ) {
