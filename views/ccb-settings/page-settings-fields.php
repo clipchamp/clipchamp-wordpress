@@ -21,6 +21,6 @@
 			<label for="<?php esc_attr_e( 'ccb_field-appendPost-' . $key ); ?>"><?php esc_attr_e( $post_type->labels->name ); ?></label>
 		</p>
 	<?php endforeach; ?>
-	<p class="description">Automatically adds the clipchamp button to each post.</p>
+	<p class="description">Automatically adds the clipchamp button to each post of the selected post type.</p>
 
 <?php endif; ?>
