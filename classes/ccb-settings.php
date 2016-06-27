@@ -115,6 +115,8 @@ if ( ! class_exists('CCB_Settings') ) {
 		 * @mvc Controller
 		 */
 		public function deactivate() {
+			// Remove settings
+			delete_option( 'ccb_settings' );
 		}
 
 		/**
