@@ -12,7 +12,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
 
         const SHORTCODE_TAG     = 'clipchamp';
         const SCRIPT_HANDLE     = 'clipchamp-button';
-        const SCRIPT_BASE_URL   = 'https://api.clipchamp.com/';
+        const SCRIPT_BASE_URL   = 'http://api.clipchamp.com/';
         const SCRIPT_FILE_NAME  = 'button.js';
         const ON_VIDEO_CREATED  = 'ccbUploadVideo';
 
@@ -44,19 +44,30 @@ if ( ! class_exists('CCB_Shortcode') ) {
         protected static function create_button_options( $local ) {
             //TODO:Improve
             $not_show = array( 'general' );
+            $do_wrap = array( 's3', 'youtube', 'gdrive', 'azure' );
             $options = 'var options' . self::$id . ' = {';
             foreach ( self::$settings as $s_key => $section ) {
                 if ( !is_array( $section ) || in_array( $s_key, $not_show ) ) {
                     continue;
                 }
+                if ( in_array( $s_key, $do_wrap ) ) {
+                    $options .= '"' . $s_key . '": {';
+                }
                 foreach ( $section as $key => $value ) {
                     // strip field from $key
                     $key = substr( $key, 6 );
-                    $key = str_replace( '-', '.', $key );
+                    if ( in_array( $s_key, $do_wrap ) ) {
+                        $key = explode( '-', $key );
+                        $key = $key[1];
+                    }
                     if ( !empty( $local[$key] ) && strpos( $local[$key], ',' ) ) {
                         $local[$key] = explode( ',', $local[$key] );
                     }
                     $options .= !empty( $local[$key] ) ? '"' . $key . '":' . json_encode( $local[$key] ) . ',' : '"' . $key . '":' . json_encode( $value ) . ',';
+                }
+                if ( in_array( $s_key, $do_wrap ) ) {
+                    $options = substr( $options, 0, -1 );
+                    $options .= '},';
                 }
             }
             if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 && ( empty( $local['output'] ) || strcmp( $local['output'], 'blob' ) == 0 ) ) {

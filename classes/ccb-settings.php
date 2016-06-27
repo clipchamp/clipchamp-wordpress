@@ -170,8 +170,9 @@ if ( ! class_exists('CCB_Settings') ) {
 		 * @return array
 		 */
 		protected static function get_default_settings() {
-			$api = array(
-				'field-apiKey' 				=> null
+			$general = array(
+				'field-apiKey' 				=> null,
+				'field-appendPost'			=> array()
 			);
 
 			$appearance = array(
@@ -220,7 +221,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			return array(
 				'db-version' 	=> '0',
-				'general'      	=> $api,
+				'general'      	=> $general,
 				'appearance'	=> $appearance,
 				'video'   		=> $video,
                 'behaviour'     => $behaviour,
@@ -692,6 +693,10 @@ if ( ! class_exists('CCB_Settings') ) {
                 'ccb-settings/fields/video.php',
                 array(
                     'settings'		=> $this->settings['video'],
+					's3'			=> $this->settings['s3'],
+					'azure'			=> $this->settings['azure'],
+					'youtube'		=> $this->settings['youtube'],
+					'gdrive'		=> $this->settings['gdrive'],
                     'field'			=> $field,
                     'default_sets'	=> self::$default_sets,
 					'api_key'		=> $this->settings['general']['field-apiKey']
@@ -743,7 +748,7 @@ if ( ! class_exists('CCB_Settings') ) {
 			}
 
 			if ( is_array( $new_settings['general']['field-appendPost'] ) && empty( $new_settings['general']['field-appendPost'][0] ) ) {
-				$new_settings['general']['field-appendPost'] = '';
+				$new_settings['general']['field-appendPost'] = array();
 			}
 
 			/*
@@ -821,7 +826,7 @@ if ( ! class_exists('CCB_Settings') ) {
 			/*
 			 * Azure Settings
 			 */
-			if ( strcmp( $new_settings['video']['field-output'], 'azure' ) == 0 && empty( $new_settings['s3']['field-azure-container'] ) ) {
+			if ( strcmp( $new_settings['video']['field-output'], 'azure' ) == 0 && empty( $new_settings['azure']['field-azure-container'] ) ) {
 				add_notice( 'Azure container cannot be empty', 'error' );
 				$new_settings['azure']['field-azure-container'] = empty( $this->settings['azure']['field-azure-container'] ) ? self::$default_settings['azure']['field-azure-container'] : $this->settings['azure']['field-azure-container'];
 				$new_settings['video']['field-output'] = empty( $this->settings['video']['field-output'] ) ? self::$default_settings['video']['field-output'] : $this->settings['video']['field-output'];
@@ -831,11 +836,11 @@ if ( ! class_exists('CCB_Settings') ) {
 			 * Behaviour Settings
 			 */
 			if ( is_array( $new_settings['behaviour']['field-enable'] ) && empty( $new_settings['behaviour']['field-enable'][0] ) ) {
-				$new_settings['behaviour']['field-enable'] = '';
+				$new_settings['behaviour']['field-enable'] = array();
 			}
 
 			if ( is_array( $new_settings['behaviour']['field-experimental'] ) && empty( $new_settings['behaviour']['field-experimental'][0] ) ) {
-				$new_settings['behaviour']['field-experimental'] = '';
+				$new_settings['behaviour']['field-experimental'] = array();
 			}
 
 			return $new_settings;
