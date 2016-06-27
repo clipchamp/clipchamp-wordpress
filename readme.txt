@@ -1,4 +1,4 @@
-=== Clipchamp Video Uploader and Webcam Recorder ===
+=== Clipchamp Video Converter, Video Uploader and Webcam Recorder ===
 Contributors: thillmann, sbalko74
 Donate link: https://clipchamp.com/pricing
 Tags: video upload, webcam recording, video transcoding, video conversion, video compression
