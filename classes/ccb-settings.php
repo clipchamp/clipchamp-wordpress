@@ -731,7 +731,7 @@ if ( ! class_exists('CCB_Settings') ) {
 			$new_settings = shortcode_atts( $this->settings, $new_settings );
 
 			if ( ! is_string( $new_settings['db-version'] ) ) {
-				$new_settings['db-version'] = Clipchamp_Button::VERSION;
+				$new_settings['db-version'] = Clipchamp::VERSION;
 			}
 
 			/*

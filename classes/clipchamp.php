@@ -1,12 +1,12 @@
 <?php
 
-if ( ! class_exists('Clipchamp_Button') ) {
+if ( ! class_exists('Clipchamp') ) {
 
 	/**
 	 * Main / front controller class
 	 *
 	 */
-	class Clipchamp_Button extends CCB_Module {
+	class Clipchamp extends CCB_Module {
 		protected static $readable_properties  = array();    // These should really be constants, but PHP doesn't allow class constants to be arrays
 		protected static $writeable_properties = array();
 		protected $modules;
@@ -31,7 +31,6 @@ if ( ! class_exists('Clipchamp_Button') ) {
 			$this->modules = array(
 				'CCB_Settings'		=> CCB_Settings::get_instance(),
 				'CCB_Shortcode'		=> CCB_Shortcode::get_instance()
-				//'WPPS_Cron'		=> CCB_Cron::get_instance()
 			);
 		}
 
@@ -284,5 +283,5 @@ if ( ! class_exists('Clipchamp_Button') ) {
 			}
 			return $content;
 		}
-	} // end Clipchamp_Button
+	} // end Clipchamp
 }

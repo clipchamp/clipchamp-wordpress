@@ -100,7 +100,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
 
         public static function register_scripts() {
             $api_key = self::$settings['general']['field-apiKey'];
-            wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp_Button::VERSION );
+            wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp::VERSION );
         }
 
         /*

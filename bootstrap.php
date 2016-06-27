@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Access denied.' );
 }
 
-define( 'CCB_NAME',                 'Clipchamp Button' );
+define( 'CCB_NAME',                 'Clipchamp' );
 define( 'CCB_REQUIRED_PHP_VERSION', '5.3' );                          // because of get_called_class()
 define( 'CCB_REQUIRED_WP_VERSION',  '3.1' );                          // because of esc_textarea()
 
@@ -63,14 +63,14 @@ function ccb_requirements_error() {
  */
 if ( ccb_requirements_met() ) {
 	require_once(__DIR__ . '/classes/ccb-module.php');
-	require_once(__DIR__ . '/classes/clipchamp-button.php');
+	require_once(__DIR__ . '/classes/clipchamp.php');
 	require_once( __DIR__ . '/includes/admin-notice-helper/admin-notice-helper.php' );
 	require_once(__DIR__ . '/classes/ccb-settings.php');
 	require_once(__DIR__ . '/classes/ccb-shortcode.php');
 	require_once(__DIR__ . '/classes/ccb-instance-class.php');
 
-	if ( class_exists('Clipchamp_Button') ) {
-		$GLOBALS['ccb'] = Clipchamp_Button::get_instance();
+	if ( class_exists('Clipchamp') ) {
+		$GLOBALS['ccb'] = Clipchamp::get_instance();
 		register_activation_hook(   __FILE__, array( $GLOBALS['ccb'], 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $GLOBALS['ccb'], 'deactivate' ) );
 	}
