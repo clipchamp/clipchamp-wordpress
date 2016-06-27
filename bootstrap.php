@@ -6,7 +6,7 @@ Description: Brings the clipchamp button to your WordPress site.
 Version: 0.1
 Author: Clipchamp Pty Ltd
 Author URI: https://clipchamp.com
-License: A "Slug" license name e.g. GPL2
+License: GPLv2
 */
 
 /*
