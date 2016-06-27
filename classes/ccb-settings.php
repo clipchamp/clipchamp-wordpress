@@ -316,6 +316,15 @@ if ( ! class_exists('CCB_Settings') ) {
 				array( 'label_for' => 'ccb_field-apiKey' )
 			);
 
+			add_settings_field(
+				'ccb_field-appendPost',
+				'Add to the end of each post?',
+				array( $this, 'markup_fields' ),
+				'ccb_settings',
+				'ccb_section-general',
+				array( 'label_for' => 'ccb_field-appendPost' )
+			);
+
 			/*
 			 * Button Appearance Section
 			 */
@@ -731,6 +740,12 @@ if ( ! class_exists('CCB_Settings') ) {
 			if ( empty( $new_settings['general']['field-apiKey'] ) ) {
 				add_notice( 'API key cannot be empty', 'error' );
 				$new_settings['general']['field-apiKey'] = empty( $this->settings['general']['field-apiKey'] ) ? self::$default_settings['general']['field-apiKey'] : $this->settings['general']['field-apiKey'];
+			}
+
+			if ( strcmp( $new_settings['general']['field-appendPost'], 'true' ) == 0 ) {
+				$new_settings['general']['field-appendPost'] = true;
+			} else {
+				$new_settings['general']['field-appendPost'] = false;
 			}
 
 			/*
