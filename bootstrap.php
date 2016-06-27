@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Clipchamp Button
+Plugin Name: Clipchamp
 Plugin URI: https://clipchamp.com
-Description: Brings the clipchamp button to your WordPress site.
+Description: Brings the Clipchamp API to your WordPress site.
 Version: 0.1
 Author: Clipchamp Pty Ltd
 Author URI: https://clipchamp.com
