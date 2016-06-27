@@ -1,6 +1,5 @@
 TODO.txt
 .idea/*
-includes/*
 *.log
 wp-config.php
 wp-content/advanced-cache.php
