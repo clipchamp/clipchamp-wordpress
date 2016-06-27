@@ -278,7 +278,8 @@ if ( ! class_exists('Clipchamp_Button') ) {
 		 * @return string
 		 */
 		public function append_post( $content ) {
-			if ( is_single() && $this->modules['CCB_Settings']->settings['general']['field-appendPost'] ) {
+			$included_post_types = $this->modules['CCB_Settings']->settings['general']['field-appendPost'];
+			if ( is_singular() && in_array( get_post_type(), $included_post_types ) ) {
 				$content .= '[clipchamp]';
 			}
 			return $content;

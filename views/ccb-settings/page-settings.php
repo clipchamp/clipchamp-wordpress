@@ -2,7 +2,7 @@
 	<div id="icon-options-general" class="icon32"><br /></div>
     <div id="branding">
         <a href="https://clipchamp.com" target="_blank" class="logo"><img src="<?php echo plugins_url( 'images/logo.svg', dirname( dirname( __FILE__ ) ) ); ?>" alt="Clipchamp" /></a>
-        <a href="https://clipchamp.com/pricing" target="_blank" class="btn">Sign up for our API</a>
+        <a href="https://clipchamp.com/pricing" target="_blank" class="btn">Sign up for the Clipchamp API</a>
     </div>
     <h1><?php esc_html_e( CCB_NAME ); ?> Settings</h1>
 

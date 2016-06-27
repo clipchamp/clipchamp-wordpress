@@ -742,10 +742,8 @@ if ( ! class_exists('CCB_Settings') ) {
 				$new_settings['general']['field-apiKey'] = empty( $this->settings['general']['field-apiKey'] ) ? self::$default_settings['general']['field-apiKey'] : $this->settings['general']['field-apiKey'];
 			}
 
-			if ( strcmp( $new_settings['general']['field-appendPost'], 'true' ) == 0 ) {
-				$new_settings['general']['field-appendPost'] = true;
-			} else {
-				$new_settings['general']['field-appendPost'] = false;
+			if ( is_array( $new_settings['general']['field-appendPost'] ) && empty( $new_settings['general']['field-appendPost'][0] ) ) {
+				$new_settings['general']['field-appendPost'] = '';
 			}
 
 			/*

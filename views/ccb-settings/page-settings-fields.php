@@ -13,9 +13,14 @@
 
 <?php if ( 'ccb_field-appendPost' == $field['label_for'] ) : ?>
 
-	<p>
-		<input id="<?php esc_attr_e( 'ccb_field-appendPost' ); ?>" name="<?php esc_attr_e( 'ccb_settings[general][field-appendPost]' ); ?>" type="checkbox" value="true" <?php checked( true, $settings['general']['field-appendPost'] ); ?> />
-	</p>
+    <?php $args = array( 'public' => true ); ?>
+
+	<?php foreach ( get_post_types( $args, 'objects' ) as $key => $post_type ) : ?>
+		<p>
+			<input id="<?php esc_attr_e( 'ccb_field-appendPost-' . $key ); ?>" name="<?php esc_attr_e( 'ccb_settings[general][field-appendPost][]' ); ?>" type="checkbox" value="<?php esc_attr_e( $key ); ?>" <?php checked( true, in_array( $key, $settings['general']['field-appendPost'] ) ); ?> />
+			<label for="<?php esc_attr_e( 'ccb_field-appendPost-' . $key ); ?>"><?php esc_attr_e( $post_type->labels->name ); ?></label>
+		</p>
+	<?php endforeach; ?>
 	<p class="description">Automatically adds the clipchamp button to each post.</p>
 
 <?php endif; ?>

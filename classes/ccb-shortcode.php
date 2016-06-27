@@ -44,9 +44,10 @@ if ( ! class_exists('CCB_Shortcode') ) {
          */
         protected static function create_button_options( $local ) {
             //TODO:Improve
+            $not_show = array( 'general' );
             $options = 'var options' . self::$id . ' = {';
-            foreach ( self::$settings as $section ) {
-                if ( !is_array( $section ) ) {
+            foreach ( self::$settings as $s_key => $section ) {
+                if ( !is_array( $section ) || in_array( $s_key, $not_show ) ) {
                     continue;
                 }
                 foreach ( $section as $key => $value ) {

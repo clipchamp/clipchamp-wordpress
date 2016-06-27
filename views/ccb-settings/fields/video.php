@@ -68,7 +68,15 @@
             <option value="<?php esc_attr_e( $output ); ?>" <?php selected( $settings['field-output'], $output ); ?>><?php esc_attr_e( $outputLabel ); ?></option>
         <?php endforeach; ?>
     </select>
-    <p class="description">The destinations where we will make the output video available or upload to. If you select "Youtube", "Microsoft Azure", "Google Drive" or "Amazon S3", you need to authorize us to upload the video into the appropriate account from the <a href="https://clipchamp.com/portal?api_key=<?php esc_attr_e( $api_key ) ?>">subscription configuration page</a>.</p>
+    <p class="description">
+        The destinations where we will make the output video available or upload to. If you select "Youtube", "Microsoft Azure", "Google Drive" or "Amazon S3", you need to authorize us to upload the video into the appropriate account from the
+        <?php if ( !empty( $api_key ) ) : ?>
+            <a href="https://clipchamp.com/portal?api_key=<?php esc_attr_e( $api_key ) ?>">subscription configuration page</a>.
+        <?php else : ?>
+            <a href="https://clipchamp.com/pricing">subscription configuration page</a>.
+        <?php endif; ?>
+        You need an enterprise plan to use the "WordPress Media Library" option.
+    </p>
     <?php if ( strcmp( $settings['field-output'], 'blob' ) == 0 ) : ?>
         <p>Upload Max Filesize: <code><?php echo ini_get( 'upload_max_filesize' ); ?></code></p>
         <p>Post Max Size: <code><?php echo ini_get( 'post_max_size' ); ?></code></p>
