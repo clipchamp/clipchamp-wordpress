@@ -12,7 +12,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
 
         const SHORTCODE_TAG     = 'clipchamp';
         const SCRIPT_HANDLE     = 'clipchamp-button';
-        const SCRIPT_BASE_URL   = 'http://api.clipchamp.com/';
+        const SCRIPT_BASE_URL   = 'https://api.clipchamp.com/';
         const SCRIPT_FILE_NAME  = 'button.js';
         const ON_VIDEO_CREATED  = 'ccbUploadVideo';
 
