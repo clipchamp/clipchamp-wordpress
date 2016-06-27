@@ -256,7 +256,7 @@ if ( ! class_exists('CCB_Settings') ) {
 		 * @return array
 		 */
 		public static function add_plugin_action_links( $links ) {
-			array_unshift( $links, '<a href="http://wordpress.org/extend/plugins/wordpress-plugin-skeleton/faq/">Help</a>' );
+			array_unshift( $links, '<a href="https://clipchamp.com/forgeeks" target="_blank">Help</a>' );
 			array_unshift( $links, '<a href="options-general.php?page=' . 'ccb_settings">Settings</a>' );
 
 			return $links;
