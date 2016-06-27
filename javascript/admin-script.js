@@ -32,7 +32,7 @@ function ccbWrapper( $ ) {
          */
         registerEventHandlers: function () {
             $( '#upload-button' ).click( ccb.initMediaUploader );
-            $( '.output-select' ).change( ccb.changeOutput );
+            $( '#ccb_field-output' ).change( ccb.changeOutput );
         },
 
         /**

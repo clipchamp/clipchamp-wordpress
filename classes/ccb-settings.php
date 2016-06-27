@@ -309,7 +309,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-apiKey',
-				'API key',
+				'API key*',
 				array( $this, 'markup_fields' ),
 				'ccb_settings',
 				'ccb_section-general',
@@ -383,7 +383,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-preset',
-				'Preset',
+				'Preset*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -392,7 +392,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-format',
-				'Format',
+				'Format*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -401,7 +401,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-resolution',
-				'Resolution',
+				'Resolution*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -410,7 +410,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-compression',
-				'Compression',
+				'Compression*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -419,7 +419,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-inputs',
-				'Inputs',
+				'Inputs*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -428,7 +428,7 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			add_settings_field(
 				'ccb_field-output',
-				'Output',
+				'Output*',
 				array( $this, 'markup_video_fields' ),
 				'ccb_settings_video',
 				'ccb_section-video',
@@ -644,9 +644,9 @@ if ( ! class_exists('CCB_Settings') ) {
 			echo self::render_template(
 			    'ccb-settings/page-settings-fields.php',
                 array(
-                    'settings' => $this->settings,
-                    'field' => $field,
-                    'default_sets' => self::$default_sets
+                    'settings'		=> $this->settings,
+                    'field'			=> $field,
+                    'default_sets'	=> self::$default_sets
                 ),
                 'always'
             );
@@ -663,9 +663,9 @@ if ( ! class_exists('CCB_Settings') ) {
             echo self::render_template(
                 'ccb-settings/fields/appearance.php',
                 array(
-                    'settings' => $this->settings['appearance'],
-                    'field' => $field,
-                    'default_sets' => self::$default_sets
+                    'settings'		=> $this->settings['appearance'],
+                    'field'			=> $field,
+                    'default_sets'	=> self::$default_sets
                 ),
                 'always'
             );
@@ -682,9 +682,10 @@ if ( ! class_exists('CCB_Settings') ) {
             echo self::render_template(
                 'ccb-settings/fields/video.php',
                 array(
-                    'settings' => $this->settings['video'],
-                    'field' => $field,
-                    'default_sets' => self::$default_sets
+                    'settings'		=> $this->settings['video'],
+                    'field'			=> $field,
+                    'default_sets'	=> self::$default_sets,
+					'api_key'		=> $this->settings['general']['field-apiKey']
                 ),
                 'always'
             );
@@ -701,9 +702,9 @@ if ( ! class_exists('CCB_Settings') ) {
             echo self::render_template(
                 'ccb-settings/fields/behaviour.php',
                 array(
-                    'settings' => $this->settings['behaviour'],
-                    'field' => $field,
-                    'default_sets' => self::$default_sets
+                    'settings'		=> $this->settings['behaviour'],
+                    'field'			=> $field,
+                    'default_sets'	=> self::$default_sets
                 ),
                 'always'
             );
@@ -811,6 +812,17 @@ if ( ! class_exists('CCB_Settings') ) {
 				add_notice( 'Azure container cannot be empty', 'error' );
 				$new_settings['azure']['field-azure-container'] = empty( $this->settings['azure']['field-azure-container'] ) ? self::$default_settings['azure']['field-azure-container'] : $this->settings['azure']['field-azure-container'];
 				$new_settings['video']['field-output'] = empty( $this->settings['video']['field-output'] ) ? self::$default_settings['video']['field-output'] : $this->settings['video']['field-output'];
+			}
+
+			/*
+			 * Behaviour Settings
+			 */
+			if ( is_array( $new_settings['behaviour']['field-enable'] ) && empty( $new_settings['behaviour']['field-enable'][0] ) ) {
+				$new_settings['behaviour']['field-enable'] = '';
+			}
+
+			if ( is_array( $new_settings['behaviour']['field-experimental'] ) && empty( $new_settings['behaviour']['field-experimental'][0] ) ) {
+				$new_settings['behaviour']['field-experimental'] = '';
 			}
 
 			return $new_settings;

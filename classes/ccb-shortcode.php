@@ -53,9 +53,10 @@ if ( ! class_exists('CCB_Shortcode') ) {
                     // strip field from $key
                     $key = substr( $key, 6 );
                     $key = str_replace( '-', '.', $key );
-                    if ( strcmp( $key, 'apiKey' ) != 0 ) {
-                        $options .= !empty( $local[$key] ) ? '"' . $key . '":' . json_encode( $local[$key] ) . ',' : '"' . $key . '":' . json_encode( $value ) . ',';
+                    if ( !empty( $local[$key] ) && strpos( $local[$key], ',' ) ) {
+                        $local[$key] = explode( ',', $local[$key] );
                     }
+                    $options .= !empty( $local[$key] ) ? '"' . $key . '":' . json_encode( $local[$key] ) . ',' : '"' . $key . '":' . json_encode( $value ) . ',';
                 }
             }
             if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 && ( empty( $local['output'] ) || strcmp( $local['output'], 'blob' ) == 0 ) ) {

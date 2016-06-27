@@ -65,10 +65,8 @@ if ( ccb_requirements_met() ) {
 	require_once(__DIR__ . '/classes/ccb-module.php');
 	require_once(__DIR__ . '/classes/clipchamp-button.php');
 	require_once( __DIR__ . '/includes/admin-notice-helper/admin-notice-helper.php' );
-	//require_once(__DIR__ . '/classes/ccb-custom-post-type.php');
 	require_once(__DIR__ . '/classes/ccb-settings.php');
 	require_once(__DIR__ . '/classes/ccb-shortcode.php');
-	//require_once(__DIR__ . '/classes/ccb-cron.php');
 	require_once(__DIR__ . '/classes/ccb-instance-class.php');
 
 	if ( class_exists('Clipchamp_Button') ) {
