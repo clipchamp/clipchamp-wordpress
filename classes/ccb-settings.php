@@ -78,7 +78,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				return;
 			}
 
-			$this->settings = self::validate_settings( $value );
+			//$this->settings = self::validate_settings( $value );
 			update_option( 'ccb_settings', $this->settings );
 		}
 
