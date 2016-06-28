@@ -13,3 +13,7 @@ git clone --recursive git@github.com:clipchamp/clipchamp-wordpress.git
 ```
 zip -r clipchamp-wordpress.zip clipchamp-wordpress/
 ```
+3. Upload the zip file to your WordPress blog (Plugins -> Add New -> Upload Plugin).
+4. Install the plugin and activate it.
+5. If you don't have a Clipchamp API key yet, [subscribe to a Clipchamp plan](https://clipchamp.com/pricing).
+6. Copy and paste your API key into the respective field in the Clipchamp settings (Settings -> Clipchamp).
