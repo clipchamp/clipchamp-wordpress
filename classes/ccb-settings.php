@@ -806,7 +806,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				$new_settings['video']['field-compression'] = empty( $this->settings['video']['field-compression'] ) ? self::$default_settings['video']['field-compression'] : $this->settings['video']['field-compression'];
 			}
 
-			if ( empty( array_intersect( $new_settings['video']['field-inputs'], array_keys( self::$default_sets['inputs'] ) ) ) ) {
+			if ( empty( $new_settings['video']['field-inputs'] ) ) {
 				add_notice( 'Invalid value for inputs', 'error' );
 				$new_settings['video']['field-inputs'] = empty( $this->settings['video']['field-inputs'] ) ? self::$default_settings['video']['field-inputs'] : $this->settings['video']['field-inputs'];
 			}
