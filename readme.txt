@@ -79,7 +79,7 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 1. Or let them upload video files they already have on their device.
 1. Clipchamp enables your users to upload directly to your youtube channel, for example.
 1. Clipchamp also supports upload to the WordPress Media Gallery, Amazon S3, Microsoft Azure and Google Drive.
-1. The Clipchamp plugin also allows you to automatically place a video upload button onto all pages and posts. Customize the button's appearance to match your website.
+1. The Clipchamp plugin allows you to automatically place a video upload button onto all pages and posts.
 1. The Clipchamp button can be placed onto your pages and into posts by using a simple `[clipchamp]` short code, as well.
 
 == Changelog ==
