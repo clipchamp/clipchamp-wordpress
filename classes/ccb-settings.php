@@ -34,7 +34,7 @@ if ( ! class_exists('CCB_Settings') ) {
                 'no-branding'                   => 'No branding',
                 'no-error-bypass'               => 'No error bypass',
                 'no-hidden-run'                 => 'Disable background upload',
-                'no-popout'                     => 'Disable poput fallback',
+                'no-popout'                     => 'Disable popout fallback',
                 'no-probe-reject'               => 'Accept all input files',
                 'no-thank-you'                  => 'Disable thank you screen'
 			),
