@@ -1,14 +1,14 @@
-=== Clipchamp Video Converter, Video Uploader and Webcam Recorder ===
+=== Webcam Recorder, Video Converter & Video Uploader ===
 Contributors: Clipchamp Pty Ltd
 Donate link: https://clipchamp.com/pricing
-Tags: video upload, webcam recording, video transcoding, video conversion, video compression
+Tags: video upload, webcam recorder, video transcoding, video conversion, video compression
 Requires at least: 3.0.1
 Tested up to: 4.5.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Collect videos and webcam recordings from your website's visitors using the Clipchamp API. 
+Collect videos and webcam recordings from your website's visitors. 
 Compress videos by up to 1/20th of the original size and convert videos to MP4, WebM, WMV, FLV, or GIF prior to uploading. 
 Supports uploading videos to the WordPress Media Gallery, Amazon S3, Microsoft Azure, Google Drive, and YouTube.
 
