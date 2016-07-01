@@ -4,6 +4,8 @@
 function ccbWrapper( $ ) {
     var ccb = {
 
+        defaultFramerate: 24,
+
         /**
          * Main entry point
          */
@@ -25,6 +27,8 @@ function ccbWrapper( $ ) {
             if ( $( '#ccb_field-apiKey' ).val() == "" ) {
                 $( '#ccb_settings input' ).attr('disabled', true);
             }
+
+
         },
 
         /**
@@ -33,6 +37,7 @@ function ccbWrapper( $ ) {
         registerEventHandlers: function () {
             $( '#upload-button' ).click( ccb.initMediaUploader );
             $( '#ccb_field-output' ).change( ccb.changeOutput );
+            $( '#ccb_field-fps' ).change( ccb.changeFramerate );
         },
 
         /**
@@ -65,9 +70,18 @@ function ccbWrapper( $ ) {
         },
 
         changeOutput: function( event ) {
-            var output = $(event.target).val();
+            var output = $( event.target ).val();
             $( '.conditional-settings' ).hide();
             $(  '#' + output + '_settings' ).show();
+        },
+
+        changeFramerate: function ( event ) {
+            var fps = $( event.target ).val();
+            if ( fps == 'custom' ) {
+                $( '#ccb_field-fps-custom' ).show();
+            } else {
+                $( '#ccb_field-fps-custom' ).hide();
+            }
         }
     }; // end ccb
 

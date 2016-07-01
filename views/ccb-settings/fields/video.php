@@ -48,6 +48,18 @@
 
 <?php endif; ?>
 
+<?php if ( 'ccb_field-fps' == $field['label_for'] ) : ?>
+
+    <select id="<?php esc_attr_e( 'ccb_field-fps' ); ?>" name="<?php esc_attr_e( 'ccb_settings[video][field-fps]' ); ?>">
+        <?php foreach ($default_sets['framerates'] as $fps => $fpsLabel ) : ?>
+            <option value="<?php esc_attr_e( $fps ); ?>" <?php echo ( $fps == $settings['field-fps'] || ( $fps != 'keep' && $settings['field-fps'] != 'keep' ) ) ? 'selected' : ''; ?>><?php esc_attr_e( $fpsLabel ); ?></option>
+        <?php endforeach; ?>
+    </select>
+    <input type="text" id="<?php esc_attr_e( 'ccb_field-fps-custom' ); ?>" name="<?php esc_attr_e( 'ccb_settings[video][field-fps-custom]' ); ?>" style="<?php echo $settings['field-fps'] == 'keep' ? 'display: none' : ''; ?>" value="<?php if ( $settings['field-fps'] != 'keep' ) esc_attr_e( $settings['field-fps'] ); ?>" />
+    <p class="description">Explanation here</p>
+
+<?php endif; ?>
+
 <?php if ( 'ccb_field-inputs' == $field['label_for'] ) : ?>
 
     <?php foreach ($default_sets['inputs'] as $input => $inputLabel ) : ?>

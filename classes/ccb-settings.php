@@ -17,6 +17,10 @@ if ( ! class_exists('CCB_Settings') ) {
 			'formats'		=> array( 'mp4', 'flv', 'webm', 'asf', 'gif' ),
 			'resolutions'	=> array( 'keep', '240p', '360p', '480p', '720p', '1080p', '320w', '640w' ),
 			'compressions'	=> array( 'min', 'low', 'medium', 'high', 'max' ),
+			'framerates'	=> array(
+				'keep'							=> 'keep',
+				'custom'						=> 'custom'
+			),
 			'inputs'		=> array(
                 'file'				            => 'Upload File',
                 'camera' 			            => 'Record Camera'
@@ -187,12 +191,14 @@ if ( ! class_exists('CCB_Settings') ) {
 
             $inputs = array_keys( self::$default_sets['inputs'] );
             $outputs = array_keys( self::$default_sets['outputs'] );
+			$framerates = array_keys( self::$default_sets['framerates'] );
 
 			$video = array(
 				'field-preset'				=> self::$default_sets['presets'][0],
 				'field-format'				=> self::$default_sets['formats'][0],
 				'field-resolution'			=> self::$default_sets['resolutions'][0],
 				'field-compression'			=> self::$default_sets['compressions'][2],
+				'field-fps'					=> $framerates[0],
 				'field-inputs'				=> array( $inputs[0], $inputs[1] ),
 				'field-output'				=> $outputs[3]
 			);
@@ -427,6 +433,15 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_settings_video',
 				'ccb_section-video',
 				array( 'label_for' => 'ccb_field-compression' )
+			);
+
+			add_settings_field(
+				'ccb_field-fps',
+				'Framerate*',
+				array( $this, 'markup_video_fields' ),
+				'ccb_settings_video',
+				'ccb_section-video',
+				array( 'label_for' => 'ccb_field-fps' )
 			);
 
 			add_settings_field(
@@ -804,6 +819,23 @@ if ( ! class_exists('CCB_Settings') ) {
 			if ( !in_array( $new_settings['video']['field-compression'], self::$default_sets['compressions'] ) ) {
 				add_notice( 'Invalid value for compression', 'error' );
 				$new_settings['video']['field-compression'] = empty( $this->settings['video']['field-compression'] ) ? self::$default_settings['video']['field-compression'] : $this->settings['video']['field-compression'];
+			}
+
+			if ( in_array( $new_settings['video']['field-fps'], array_keys( self::$default_sets['framerates'] ) ) ) {
+				if ( $new_settings['video']['field-fps'] == 'custom' && !empty( $new_settings['video']['field-fps-custom'] ) ) {
+					// TODO: Check for float
+					$new_settings['video']['field-fps'] = floatval( $new_settings['video']['field-fps-custom'] );
+					if ( $new_settings['video']['field-fps'] == 0 ) {
+						add_notice( 'Invalid value for framerate', 'error' );
+						$new_settings['video']['field-fps'] = empty( $this->settings['video']['field-fps'] ) ? self::$default_settings['video']['field-fps'] : $this->settings['video']['field-fps'];
+					}
+				} else {
+					add_notice( 'Invalid value for framerate', 'error' );
+				}
+				unset( $new_settings['video']['field-fps-custom'] );
+			} else {
+				add_notice( 'Invalid value for framerate', 'error' );
+				$new_settings['video']['field-fps'] = empty( $this->settings['video']['field-fps'] ) ? self::$default_settings['video']['field-fps'] : $this->settings['video']['field-fps'];
 			}
 
 			if ( empty( $new_settings['video']['field-inputs'] ) ) {
