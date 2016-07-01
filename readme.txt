@@ -84,5 +84,8 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 
 == Changelog ==
 
+= 1.0.1 =
+* Added support for the framerate API option
+
 = 1.0 =
 * Initial release of the Clipchamp video uploading and webcam recording plugin
