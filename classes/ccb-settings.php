@@ -823,14 +823,16 @@ if ( ! class_exists('CCB_Settings') ) {
 
 			if ( in_array( $new_settings['video']['field-fps'], array_keys( self::$default_sets['framerates'] ) ) ) {
 				if ( $new_settings['video']['field-fps'] == 'custom' && !empty( $new_settings['video']['field-fps-custom'] ) ) {
-					// TODO: Check for float
 					$new_settings['video']['field-fps'] = floatval( $new_settings['video']['field-fps-custom'] );
 					if ( $new_settings['video']['field-fps'] == 0 ) {
 						add_notice( 'Invalid value for framerate', 'error' );
 						$new_settings['video']['field-fps'] = empty( $this->settings['video']['field-fps'] ) ? self::$default_settings['video']['field-fps'] : $this->settings['video']['field-fps'];
 					}
 				} else {
-					add_notice( 'Invalid value for framerate', 'error' );
+					if ( strcmp( $new_settings['video']['field-fps'], 'keep' ) != 0 ) {
+						add_notice( 'Invalid value for framerate', 'error' );
+						$new_settings['video']['field-fps'] = empty( $this->settings['video']['field-fps'] ) ? self::$default_settings['video']['field-fps'] : $this->settings['video']['field-fps'];
+					}
 				}
 				unset( $new_settings['video']['field-fps-custom'] );
 			} else {

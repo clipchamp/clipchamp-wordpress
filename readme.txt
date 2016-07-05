@@ -2,7 +2,7 @@
 Contributors: Clipchamp Pty Ltd
 Donate link: https://clipchamp.com/pricing
 Tags: video upload, webcam recorder, video transcoding, video conversion, video compression
-Requires at least: 3.0.1
+Requires at least: 4.0.0
 Tested up to: 4.5.3
 Stable tag: trunk
 License: GPLv2 or later
@@ -83,6 +83,9 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 1. The Clipchamp button can be placed onto your pages and into posts by using a simple `[clipchamp]` short code, as well.
 
 == Changelog ==
+
+= 1.0.2 =
+* Added support for WordPress versions down to 4.0.0
 
 = 1.0.1 =
 * Added support for the framerate API option

@@ -103,11 +103,43 @@ if ( ! class_exists('CCB_Shortcode') ) {
             $jsScript = self::create_button_options( $attributes );
             $jsScript .= 'var element' . self::$id . ' = document.getElementById("clipchamp-button-' . self::$id . '");';
             $jsScript .= 'clipchamp(element' . self::$id . ', options' . self::$id . ');';
-            wp_add_inline_script( self::SCRIPT_HANDLE, $jsScript );
+            if ( function_exists( 'wp_add_inline_script' ) ) {
+                wp_add_inline_script( self::SCRIPT_HANDLE, $jsScript );
+            } else {
+                self::add_inline_script( self::SCRIPT_HANDLE, $jsScript );
+            }
 
             return '<div id="clipchamp-button-' . self::$id++ . '" class="clipchamp-button"></div><p></p>';
         }
 
+        /**
+         * Add inline script to initialize Clipchamp button.
+         * Method for WordPress version prior 4.5.0.
+         *
+         * @mvc Controller
+         *
+         * @param string $handle Script handle
+         * @param string $data Inline script to be added
+         */
+        public static function add_inline_script( $handle, $data ) {
+            $handle = $handle . '-inline';
+
+            $cb = function()use( $handle, $data ){
+                if( wp_script_is( $handle, 'done' ) )
+                    return;
+                echo "<script type=\"text/javascript\" id=\"js-$handle\">\n$data\n</script>\n";
+                global $wp_scripts;
+                $wp_scripts->done[] = $handle;
+            };
+
+            add_action( 'wp_print_footer_scripts', $cb );
+        }
+
+        /**
+         * Registers script for the shortcode.
+         *
+         * @mvc Controller
+         */
         public static function register_scripts() {
             $api_key = self::$settings['general']['field-apiKey'];
             wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp::VERSION );
