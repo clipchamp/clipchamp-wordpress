@@ -16,11 +16,11 @@ Compress videos by up to 1/20th of the original size.
 The Clipchamp Video Uploader and Webcam Recorder adds the features of the [Clipchamp API](https://clipchamp.com/getthebutton) to your WordPress-based website.
 
 
-By adding the Clipchamp short code to your WordPress posts and pages, you will be able to collect videos from your website's visitors or let them make webcam recordings.
+By adding the Clipchamp short code to your WordPress posts and pages, you will be able to collect videos from your website's visitors or let them make webcam recordings in the frontend of your website or blog.
 
 
 The Clipchamp API will then compress and convert these videos into one of the supported video formats (MP4, WebM, WMV, FLV, GIF)
-and upload them to one of the supported upload targets (WordPress Media Gallery, Amazon S3, Microsoft Azure, Google Drive, YouTube).
+and upload them directly to an upload target you nominate - currently supported are Amazon S3, Microsoft Azure, Google Drive, YouTube and the WordPress Media Gallery.
 
 
 Unlike any other webcam recorder and video uploader, Clipchamp is based purely on HTML5, using the cutting-edge of modern web technologies.
@@ -29,7 +29,7 @@ Unlike any other webcam recorder and video uploader, Clipchamp is based purely o
 It also compresses all videos and converts them into 1 standard format of your choice *before* they get uploaded to you. This reduces or even eliminates the need for server-side transcoding and involved costs.
 
 
-All videos get sent directly to you and are neither processed on nor routed through Clipchamp servers, preserving your users' privacy. We [never have access](https://help.clipchamp.com/hc/en-us/articles/215476938-Does-Clipchamp-have-access-to-my-users-videos-) to your users' videos.
+All user-generated videos get sent directly to you and are neither processed on nor routed through Clipchamp servers, preserving your users' privacy. We [never have access](https://help.clipchamp.com/hc/en-us/articles/215476938-Does-Clipchamp-have-access-to-my-users-videos-) to your users' videos.
 
 
 For a more in-depth description of the Clipchamp WordPress plugin refer to the [Clipchamp help centre article](https://help.clipchamp.com/hc/en-us/articles/221755028-What-is-the-Clipchamp-Plugin-for-WordPress-).
