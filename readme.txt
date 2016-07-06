@@ -29,7 +29,7 @@ Unlike any other webcam recorder and video uploader, Clipchamp is based purely o
 It also compresses all videos and converts them into 1 standard format of your choice *before* they get uploaded to you. This reduces or even eliminates the need for server-side transcoding and involved costs.
 
 
-All user-generated videos get sent directly to you and are neither processed on nor routed through Clipchamp servers, preserving your users' privacy. We [never have access](https://help.clipchamp.com/hc/en-us/articles/215476938-Does-Clipchamp-have-access-to-my-users-videos-) to your users' videos.
+All user generated videos get sent directly to you and are neither processed on nor routed through Clipchamp servers, protecting your users' privacy. We [never have access](https://help.clipchamp.com/hc/en-us/articles/215476938-Does-Clipchamp-have-access-to-my-users-videos-) to your users' videos.
 
 
 For a more in-depth description of the Clipchamp WordPress plugin refer to the [Clipchamp help centre article](https://help.clipchamp.com/hc/en-us/articles/221755028-What-is-the-Clipchamp-Plugin-for-WordPress-).
@@ -55,7 +55,7 @@ For more information refer to [Clipchamp's help centre article](https://help.cli
 
 = What can I do with the Clipchamp Video Uploader and Webcam Recorder plugin? =
 
-This plugin lets you embed a button on your WordPress-based website that your visitors can click to either 1) record videos and upload to you or 2) upload video files they already have on their device. The plugin comes with a number of resolution (incl. 480p, 720p, 1080p), format (incl. MP4 and WebM) and compression (5 levels) options.
+This plugin lets you collect user generated video. It embeds a button on your WordPress-based website that your visitors can click to either 1) record videos and upload to you or 2) upload video files they already have on their device. The plugin comes with a number of resolution (incl. 480p, 720p, 1080p), format (incl. MP4 and WebM) and compression (5 levels) options.
 
 = How is the Clipchamp Video Uploader and Webcam recorder plugin different from a plain file uploader? =
 
@@ -77,10 +77,10 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 
 1. Allow your website's visitors to make a webcam recording.
 1. Or let them upload video files they already have on their device.
-1. Clipchamp enables your users to upload directly to your youtube channel, for example.
+1. Clipchamp enables your users to upload directly to your YouTube channel, for example.
 1. Clipchamp also supports upload to the WordPress Media Gallery, Amazon S3, Microsoft Azure and Google Drive.
 1. The Clipchamp plugin allows you to automatically place a video upload button onto all pages and posts.
-1. The Clipchamp button can be placed onto your pages and into posts by using a simple `[clipchamp]` short code, as well.
+1. The Clipchamp button can be placed onto your pages and into posts by using a simple `[clipchamp]` short code as well.
 
 == Changelog ==
 
