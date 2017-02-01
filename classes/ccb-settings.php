@@ -231,7 +231,9 @@ if ( ! class_exists('CCB_Settings') ) {
             );
 
             $posts = array(
-                'field-post-status'              => 'pending'
+                'field-show-with-posts'     => false,
+                'field-post-status'         => 'pending',
+                'field-post-category'       => 1
             );
 
 			$s3 = array(
@@ -422,7 +424,7 @@ if ( ! class_exists('CCB_Settings') ) {
 			 */
 			add_settings_section(
 				'ccb_section-video',
-				'Video Settings',
+				'',
 				__CLASS__ . '::markup_section_headers',
 				'ccb_settings_video'
 			);
@@ -641,12 +643,30 @@ if ( ! class_exists('CCB_Settings') ) {
             );
 
             add_settings_field(
+                'ccb_field-show-with-posts',
+                'Show Videos with Posts',
+                array( $this, 'markup_posts_fields' ),
+                'ccb_settings_posts',
+                'ccb_section-posts',
+                array( 'label_for' => 'ccb_field-show-with-posts' )
+            );
+
+            add_settings_field(
                 'ccb_field-post-status',
                 'Status',
                 array( $this, 'markup_posts_fields' ),
                 'ccb_settings_posts',
                 'ccb_section-posts',
                 array( 'label_for' => 'ccb_field-post-status' )
+            );
+
+            add_settings_field(
+                'ccb_field-post-category',
+                'Category',
+                array( $this, 'markup_posts_fields' ),
+                'ccb_settings_posts',
+                'ccb_section-posts',
+                array( 'label_for' => 'ccb_field-post-category' )
             );
 
 
@@ -960,6 +980,15 @@ if ( ! class_exists('CCB_Settings') ) {
 			if ( ! empty( $new_settings['behaviour']['field-experimental'][0] ) ) {
                 array_pop( $new_settings['behaviour']['field-experimental'] );
 			}
+
+            /*
+             * Post Settings
+             */
+            if ( empty( $new_settings['posts']['field-show-with-posts'] ) || !$new_settings['posts']['field-show-with-posts'] ) {
+                $new_settings['posts']['field-show-with-posts'] = false;
+            } else {
+                $new_settings['posts']['field-show-with-posts'] = true;
+            }
 
 			return $new_settings;
 		}

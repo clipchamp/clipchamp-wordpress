@@ -12,7 +12,7 @@
 
 <?php elseif ( 'ccb_section-posts' == $section['id'] ) : ?>
 
-    <p>Settings for the posts</p>
+    <p>Everytime a users uploads a video through the Clipchamp button, a video post (see Clipchamp Videos on the left) will be created. Manage the default settings for these posts here.</p>
 
 <?php elseif ( 'ccb_section-s3' == $section['id'] ) : ?>
 

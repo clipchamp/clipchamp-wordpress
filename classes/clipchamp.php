@@ -204,7 +204,7 @@ if ( ! class_exists('Clipchamp') ) {
                 'post_status'       => $this->modules['CCB_Settings']->settings['posts']['field-post-status'],
                 'post_author'       => $user,
                 'tax_input'         => array(
-                    'category' => 1
+                    'category'      => $this->modules['CCB_Settings']->settings['posts']['field-post-category']
                 ),
                 'meta_input'        => array(
                     'ccb_video-url' => $url
@@ -302,7 +302,9 @@ if ( ! class_exists('Clipchamp') ) {
 			add_action( 'init',							array( $this, 'init' ) );
 			add_action( 'init',							array( $this, 'upgrade' ), 11 );
 
-			add_filter ( 'the_content',					array( $this, 'append_post' ), 0 );
+			add_filter( 'the_content',					array( $this, 'append_post' ), 0 );
+			add_filter( 'pre_get_posts',                array( $this, 'show_videos_with_posts' ) );
+            add_filter('widget_posts_args',             array( $this, 'show_videos_in_widgets' ) );
 		}
 
 		/**
@@ -366,5 +368,36 @@ if ( ! class_exists('Clipchamp') ) {
 			}
 			return $content;
 		}
+
+        /**
+         * Adds video post type to WP queries.
+         *
+         * @mvc Model
+         *
+         * @param array $query
+         * @return array
+         */
+		public function show_videos_with_posts($query) {
+		    $show = $this->modules['CCB_Settings']->settings['posts']['field-show-with-posts'];
+		    if ( $show ) {
+                if ( ( ( is_home() || is_category() ) && $query->is_main_query() ) )
+                    $query->set( 'post_type', array( 'post', CCB_Video_Post_Type::POST_TYPE_SLUG ) );
+            }
+            return $query;
+        }
+
+        /**
+         * Adds video post type to widget queries.
+         *
+         * @param array $params
+         * @return array
+         */
+        public function show_videos_in_widgets($params) {
+            $show = $this->modules['CCB_Settings']->settings['posts']['field-show-with-posts'];
+            if ( $show ) {
+                $params['post_type'] = array( 'post', CCB_Video_Post_Type::POST_TYPE_SLUG );
+            }
+            return $params;
+        }
 	} // end Clipchamp
 }

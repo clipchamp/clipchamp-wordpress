@@ -71,7 +71,7 @@ if ( ! class_exists( 'CCB_Video_Post_Type' ) ) {
                 'menu_icon'            => 'dashicons-media-video',
                 'hierarchical'         => false,
                 'capability_type'      => 'post',
-                'has_archive'          => true,
+                'has_archive'          => false,
                 'rewrite'              => array(
                     'slug' => 'videos'
                 ),
