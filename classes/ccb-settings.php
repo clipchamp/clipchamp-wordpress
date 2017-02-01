@@ -46,7 +46,29 @@ if ( ! class_exists('CCB_Settings') ) {
                 'force-popout'	                => 'Always launch UI in separate popout window',
                 'overlong-recording'		    => 'Allow recording without timely limitation',
                 'h264-hardware-acceleration'	=> 'Enable hardware-accelerated H.264 encoding'
-			)
+			),
+            'post_statuses' => array(
+                'publish'                       => 'Publish',
+                'draft'                         => 'Draft',
+                'pending'                       => 'Pending',
+                'private'                       => 'Private'
+            ),
+            's3_regions' => array(
+                'us-east-1'         => 'US East (N. Virginia)',
+                'us-east-2'         => 'US East (Ohio)',
+                'us-west-1'         => 'US West (N. California)',
+                'us-west-2'         => 'US West (Oregon)',
+                'ca-central-1'      => 'Canada (Central)',
+                'ap-south-1'        => 'Asia Pacific (Mumbai)',
+                'ap-northeast-2'    => 'Asia Pacific (Seoul)',
+                'ap-southeast-1'    => 'Asia Pacific (Singapore)',
+                'ap-southeast-2'    => 'Asia Pacific (Sydney)',
+                'ap-northeast-1'    => 'Asia Pacific (Tokyo)',
+                'eu-central-1'      => 'EU (Frankfurt)',
+                'eu-west-1'         => 'EU (Ireland)',
+                'eu-west-2'         => 'EU (London)',
+                'sa-east-1'         => 'South America (São Paulo)'
+            )
 		);
 
 		const REQUIRED_CAPABILITY = 'administrator';
@@ -208,7 +230,12 @@ if ( ! class_exists('CCB_Settings') ) {
                 'field-experimental'        => array()
             );
 
+            $posts = array(
+                'field-post-status'              => 'pending'
+            );
+
 			$s3 = array(
+			    'field-s3-region'           => '',
 				'field-s3-bucket'			=> '',
 				'field-s3-folder'			=> ''
 			);
@@ -233,6 +260,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				'appearance'	=> $appearance,
 				'video'   		=> $video,
                 'behaviour'     => $behaviour,
+				'posts'         => $posts,
 				's3'			=> $s3,
 				'azure'			=> $azure,
 				'gdrive'		=> $gdrive,
@@ -472,6 +500,15 @@ if ( ! class_exists('CCB_Settings') ) {
 				'ccb_settings_s3'
 			);
 
+            add_settings_field(
+                'ccb_field-s3-region',
+                'S3 Region*',
+                array( $this, 'markup_video_fields' ),
+                'ccb_settings_s3',
+                'ccb_section-s3',
+                array( 'label_for' => 'ccb_field-s3-region' )
+            );
+
 			add_settings_field(
 				'ccb_field-s3-bucket',
 				'S3 Bucket*',
@@ -593,6 +630,26 @@ if ( ! class_exists('CCB_Settings') ) {
 				array( 'label_for' => 'ccb_field-experimental' )
 			);
 
+            /*
+             * Posts Section
+             */
+            add_settings_section(
+                'ccb_section-posts',
+                '',
+                __CLASS__ . '::markup_section_headers',
+                'ccb_settings_posts'
+            );
+
+            add_settings_field(
+                'ccb_field-post-status',
+                'Status',
+                array( $this, 'markup_posts_fields' ),
+                'ccb_settings_posts',
+                'ccb_section-posts',
+                array( 'label_for' => 'ccb_field-post-status' )
+            );
+
+
             register_setting(
                 'ccb_settings_appearance',
                 'ccb_settings_appearance',
@@ -632,6 +689,12 @@ if ( ! class_exists('CCB_Settings') ) {
             register_setting(
                 'ccb_settings_behaviour',
                 'ccb_settings_behaviour',
+                array( $this, 'validate_settings' )
+            );
+
+            register_setting(
+                'ccb_settings_posts',
+                'ccb_settings_posts',
                 array( $this, 'validate_settings' )
             );
 
@@ -741,6 +804,25 @@ if ( ! class_exists('CCB_Settings') ) {
             );
         }
 
+        /**
+         * Delivers the markup for posts settings fields
+         *
+         * @mvc Controller
+         *
+         * @param array $field
+         */
+        public function markup_posts_fields( $field ) {
+            echo self::render_template(
+                'ccb-settings/fields/posts.php',
+                array(
+                    'settings'		=> $this->settings['posts'],
+                    'field'			=> $field,
+                    'default_sets'	=> self::$default_sets
+                ),
+                'always'
+            );
+        }
+
 		/**
 		 * Validates submitted setting values before they get saved to the database. Invalid data will be overwritten with defaults.
 		 *
@@ -750,7 +832,7 @@ if ( ! class_exists('CCB_Settings') ) {
 		 * @return array
 		 */
 		public function validate_settings( $new_settings ) {
-			$new_settings = shortcode_atts( $this->settings, $new_settings );
+		    $new_settings = shortcode_atts( $this->settings, $new_settings );
 
 			if ( ! is_string( $new_settings['db-version'] ) ) {
 				$new_settings['db-version'] = Clipchamp::VERSION;
@@ -853,9 +935,10 @@ if ( ! class_exists('CCB_Settings') ) {
 			/*
 			 * S3 Settings
 			 */
-			if ( strcmp( $new_settings['video']['field-output'], 's3' ) == 0 && empty( $new_settings['s3']['field-s3-bucket'] ) ) {
-				add_notice( 'S3 bucket cannot be empty', 'error' );
-				$new_settings['s3']['field-s3-bucket'] = empty( $this->settings['s3']['field-s3-bucket'] ) ? self::$default_settings['s3']['field-s3-bucket'] : $this->settings['s3']['field-s3-bucket'];
+			if ( strcmp( $new_settings['video']['field-output'], 's3' ) == 0 && empty( $new_settings['s3']['field-s3-bucket'] ) && empty( $new_settings['s3']['field-s3-region'] ) ) {
+				add_notice( 'S3 region and bucket cannot be empty', 'error' );
+                $new_settings['s3']['field-s3-region'] = empty( $this->settings['s3']['field-s3-region'] ) ? self::$default_settings['s3']['field-s3-region'] : $this->settings['s3']['field-s3-region'];
+                $new_settings['s3']['field-s3-bucket'] = empty( $this->settings['s3']['field-s3-bucket'] ) ? self::$default_settings['s3']['field-s3-bucket'] : $this->settings['s3']['field-s3-bucket'];
 				$new_settings['video']['field-output'] = empty( $this->settings['video']['field-output'] ) ? self::$default_settings['video']['field-output'] : $this->settings['video']['field-output'];
 			}
 
@@ -871,12 +954,11 @@ if ( ! class_exists('CCB_Settings') ) {
 			/*
 			 * Behaviour Settings
 			 */
-			if ( is_array( $new_settings['behaviour']['field-enable'] ) && empty( $new_settings['behaviour']['field-enable'][0] ) ) {
-				$new_settings['behaviour']['field-enable'] = array();
+			if ( ! empty( $new_settings['behaviour']['field-enable'][0] ) ) {
+				array_pop( $new_settings['behaviour']['field-enable'] );
 			}
-
-			if ( is_array( $new_settings['behaviour']['field-experimental'] ) && empty( $new_settings['behaviour']['field-experimental'][0] ) ) {
-				$new_settings['behaviour']['field-experimental'] = array();
+			if ( ! empty( $new_settings['behaviour']['field-experimental'][0] ) ) {
+                array_pop( $new_settings['behaviour']['field-experimental'] );
 			}
 
 			return $new_settings;

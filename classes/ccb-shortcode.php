@@ -10,11 +10,13 @@ if ( ! class_exists('CCB_Shortcode') ) {
         protected static $readable_properties	= array( 'id', 'settings' );
         protected static $writeable_properties	= array( 'id' );
 
-        const SHORTCODE_TAG     = 'clipchamp';
-        const SCRIPT_HANDLE     = 'clipchamp-button';
-        const SCRIPT_BASE_URL   = 'https://api.clipchamp.com/';
-        const SCRIPT_FILE_NAME  = 'button.js';
-        const ON_VIDEO_CREATED  = 'ccbUploadVideo';
+        const SHORTCODE_TAG         = 'clipchamp';
+        const SCRIPT_HANDLE         = 'clipchamp-button';
+        const SCRIPT_BASE_URL       = 'https://api.clipchamp.com/';
+        const SCRIPT_FILE_NAME      = 'button.js';
+        const ON_PREVIEW_AVAILABLE  = 'ccbPreviewAvailable';
+        const ON_VIDEO_CREATED      = 'ccbUploadVideo';
+        const ON_UPLOAD_COMPLETE    = 'ccbUploadComplete';
 
         /*
 		 * General methods
@@ -43,7 +45,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
          */
         protected static function create_button_options( $local ) {
             //TODO:Improve
-            $not_show = array( 'general' );
+            $not_show = array( 'general', 'posts' );
             $do_wrap = array( 's3', 'youtube', 'gdrive', 'azure' );
             $options = 'var options' . self::$id . ' = {';
             foreach ( self::$settings as $s_key => $section ) {
@@ -63,16 +65,25 @@ if ( ! class_exists('CCB_Shortcode') ) {
                     if ( !empty( $local[$key] ) && strpos( $local[$key], ',' ) ) {
                         $local[$key] = explode( ',', $local[$key] );
                     }
-                    $options .= !empty( $local[$key] ) ? '"' . $key . '":' . json_encode( $local[$key] ) . ',' : '"' . $key . '":' . json_encode( $value ) . ',';
+                    if ( $local[$key] && ! empty( $local[$key] ) ) {
+                        $value = $local[$key];
+                    }
+                    if ( ( ! is_array( $value ) && ! empty( $value ) ) || ( is_array( $value ) && ! empty( $value[0] ) ) ) {
+                        $options .= '"' . $key . '":' . json_encode( $value ) . ',';
+                    }
                 }
                 if ( in_array( $s_key, $do_wrap ) ) {
-                    $options = substr( $options, 0, -1 );
+                    if ( substr( $options, -1 ) === ',' ) {
+                        $options = substr( $options, 0, -1 );
+                    }
                     $options .= '},';
                 }
             }
-            if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 && ( empty( $local['output'] ) || strcmp( $local['output'], 'blob' ) == 0 ) ) {
+            if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 || strcmp( $local['output'], 'blob' ) == 0 ) {
                 $options .= 'onVideoCreated: ' . self::ON_VIDEO_CREATED . ',';
             }
+            //$options .= 'onPreviewAvailable: ' . self::ON_PREVIEW_AVAILABLE . ',';
+            $options .= 'onUploadComplete: ' . self::ON_UPLOAD_COMPLETE . ',';
             $options = substr( $options, 0, -1 );
             $options .= '};';
             return $options;
@@ -87,6 +98,10 @@ if ( ! class_exists('CCB_Shortcode') ) {
          * @return string
          */
         public static function render_shortcode( $attributes ) {
+            if ( empty( self::$settings['general']['field-apiKey'] ) ) {
+                return 'You need to enter your API key to use Clipchamp';
+            }
+
             wp_enqueue_script( self::SCRIPT_HANDLE );
             if ( !self::$ajax_init ) {
                 wp_localize_script(
@@ -96,6 +111,8 @@ if ( ! class_exists('CCB_Shortcode') ) {
                 );
                 self::$ajax_init = true;
             }
+
+            //$locale = get_locale();
 
             //TODO:Validate attributes
             $attributes = apply_filters( 'ccb_shortcode-attributes', $attributes );
@@ -145,6 +162,27 @@ if ( ! class_exists('CCB_Shortcode') ) {
             wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp::VERSION );
         }
 
+        /**
+         * Returns json object containing the localization strings.
+         * This request is cached.
+         *
+         * @param string $locale
+         * @return string
+         */
+        public static function get_localization( $locale ) {
+            $localization = wp_cache_get( 'ccb_localization_' . $locale );
+            if ( false == $localization ) {
+                $file_name = $locale . '.json';
+                $localization = file_get_contents( $file_name );
+                if ( $localization ) {
+                    $localization = json_decode( $localization );
+                    wp_cache_set( 'ccb_localization_' . $locale, $localization );
+                    return $localization;
+                }
+            }
+            return false;
+        }
+
         /*
 		 * Instance methods
 		 */
@@ -155,8 +193,8 @@ if ( ! class_exists('CCB_Shortcode') ) {
          * @mvc Controller
          */
         public function register_hook_callbacks() {
-            add_action( 'init',                 array( $this, 'init' ) );
-            add_action( 'wp_enqueue_scripts',   __CLASS__ . '::register_scripts' );
+            add_action( 'init',                     array( $this, 'init' ) );
+            add_action( 'wp_enqueue_scripts',       __CLASS__ . '::register_scripts' );
             add_shortcode( self::SHORTCODE_TAG, __CLASS__ . '::render_shortcode' );
         }
 
@@ -193,7 +231,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
          *
          * @mvc Model
          *
-         * @param string $db_version
+         * @param integer $db_version
          */
         public function upgrade( $db_version = 0 ) {
         }

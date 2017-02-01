@@ -1,8 +1,4 @@
 var ccbUploadVideo = function( blob, done, fail, notify ) {
-
-	console.log( 'Video was successfully created!' );
-	console.log( 'Uploading to WordPress...' );
-
 	var data = new FormData();
 	data.append( 'action', 'ccb_upload' );
 	data.append( 'video', blob );
@@ -26,13 +22,22 @@ var ccbUploadVideo = function( blob, done, fail, notify ) {
 		contentType: false,
 		processData: false
 	})
-		.done(function() {
-			console.log( 'Upload successful!' );
-			done();
+		.done(function(response) {
+			done(response);
 		})
 		.fail(function() {
-			console.log( 'Upload failed!' );
 			fail();
 		});
+};
 
+var ccbPreviewAvailable = function(image) {
+};
+
+var ccbUploadComplete = function(data) {
+	var data = {
+        action: 'ccb_upload_complete',
+        data: data
+	};
+    jQuery.post(ccb_ajax.ajax_url, data, function(response) {
+    });
 };

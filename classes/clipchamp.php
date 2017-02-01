@@ -11,7 +11,7 @@ if ( ! class_exists('Clipchamp') ) {
 		protected static $writeable_properties = array();
 		protected $modules;
 
-		const VERSION    = '0.4a';
+		const VERSION    = '0.5.3';
 		const PREFIX     = 'ccb_';
 		const DEBUG_MODE = false;
 
@@ -29,8 +29,9 @@ if ( ! class_exists('Clipchamp') ) {
 			$this->register_hook_callbacks();
 
 			$this->modules = array(
-				'CCB_Settings'		=> CCB_Settings::get_instance(),
-				'CCB_Shortcode'		=> CCB_Shortcode::get_instance()
+				'CCB_Settings'		    => CCB_Settings::get_instance(),
+				'CCB_Video_Post_Type'   => CCB_Video_Post_Type::get_instance(),
+				'CCB_Shortcode'		    => CCB_Shortcode::get_instance()
 			);
 		}
 
@@ -101,6 +102,13 @@ if ( ! class_exists('Clipchamp') ) {
 			}
 		}
 
+        /**
+         *
+         */
+        public static function preview_available() {
+
+        }
+
 		/**
 		 * Handles the file upload.
 		 *
@@ -128,14 +136,85 @@ if ( ! class_exists('Clipchamp') ) {
 					'post_status'    => 'inherit'
 				);
 
-				$attach_id = wp_insert_attachment( $attachment, $video['file'], 0 );
+				wp_insert_attachment( $attachment, $video['file'], 0 );
 
-				echo $attach_id;
+				exit( $video['url'] );
 
 			} else {
-				echo $video['error'];
+				exit( $video['error'] );
 			}
 		}
+
+        /**
+         * Inserts a video post into the WordPress database after an upload is completed.
+         *
+         * @mvc Controller
+         */
+		public function upload_complete() {
+            $data = $_POST['data'];
+            $filename = esc_attr( $data['filename'] );
+            $url = '';
+            $content = '';
+
+            if ( is_user_logged_in() ) {
+                $user = get_current_user_id();
+            } else {
+                $user = 1;
+            }
+
+            $kind = esc_attr( $data['kind'] );
+            switch( $kind ) {
+                case 'youtube':
+                    if ($data['url']) {
+                        $url = esc_url( $data['url'] );
+                    }
+                    $content = $url;
+                    break;
+                case 'azure':
+                    return null;
+                case 's3':
+                    $region = $this->modules['CCB_Settings']->settings['s3']['field-s3-region'];
+
+                    $prefix = 'https://s3';
+                    if ($region !== 'us-east-1') {
+                        $prefix .= '-' . $region;
+                    }
+                    $prefix .= '.amazonaws.com/';
+
+                    $bucket = $this->modules['CCB_Settings']->settings['s3']['field-s3-bucket'];
+                    $key = esc_attr( $data['key'] );
+                    $url = $prefix . $bucket . '/' . $key;
+                    $content = $url;
+                    break;
+                case 'gdrive':
+                    $id = esc_attr( $data['id'] );
+                    $url = 'https://drive.google.com/uc?export=download&id=' . $id;
+                    $content = '<video controls src="' . $url . '" width="100%"></video>';
+                    break;
+                case 'blob':
+                    $url = esc_url( $data['data'][0] );
+                    $content = $url;
+                    break;
+            }
+
+            $post_arr = array(
+                'post_title'        => apply_filters( 'cbb_video_name', $filename ),
+                'post_type'         => CCB_Video_Post_Type::POST_TYPE_SLUG,
+                'post_content'      => apply_filters( 'cbb_video_content', $content ),
+                'post_status'       => $this->modules['CCB_Settings']->settings['posts']['field-post-status'],
+                'post_author'       => $user,
+                'tax_input'         => array(
+                    'category' => 1
+                ),
+                'meta_input'        => array(
+                    'ccb_video-url' => $url
+                )
+            );
+
+            $post_id = wp_insert_post( apply_filters( 'cbb_video', $post_arr ) );
+
+            exit( $post_id );
+        }
 
 
 		/*
@@ -210,11 +289,15 @@ if ( ! class_exists('Clipchamp') ) {
 		 * @mvc Controller
 		 */
 		public function register_hook_callbacks() {
-			add_action( 'wpmu_new_blog',				__CLASS__ . '::activate_new_site' );
-			add_action( 'wp_enqueue_scripts',			__CLASS__ . '::load_resources' );
-			add_action( 'admin_enqueue_scripts',		__CLASS__ . '::load_resources' );
-			add_action( 'wp_ajax_ccb_upload',			__CLASS__ . '::upload' );
-			add_action( 'wp_ajax_nopriv_ccb_upload',	__CLASS__ . '::upload' );
+			add_action( 'wpmu_new_blog',				        __CLASS__ . '::activate_new_site' );
+			add_action( 'wp_enqueue_scripts',			        __CLASS__ . '::load_resources' );
+			add_action( 'admin_enqueue_scripts',		        __CLASS__ . '::load_resources' );
+            add_action( 'wp_ajax_ccb_upload_preview_available',	__CLASS__ . '::preview_available' );
+            add_action( 'wp_ajax_nopriv_ccb_preview_available',	__CLASS__ . '::preview_available' );
+			add_action( 'wp_ajax_ccb_upload',			        __CLASS__ . '::upload' );
+			add_action( 'wp_ajax_nopriv_ccb_upload',	        __CLASS__ . '::upload' );
+            add_action( 'wp_ajax_ccb_upload_complete',			array( $this, 'upload_complete' ) );
+            add_action( 'wp_ajax_nopriv_ccb_upload_complete',	array( $this, 'upload_complete' ) );
 
 			add_action( 'init',							array( $this, 'init' ) );
 			add_action( 'init',							array( $this, 'upgrade' ), 11 );

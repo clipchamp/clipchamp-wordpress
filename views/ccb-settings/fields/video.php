@@ -102,6 +102,23 @@
  */
 ?>
 
+<?php if ( 'ccb_field-s3-region' == $field['label_for'] ) : ?>
+
+    <select id="<?php esc_attr_e( 'ccb_field-s3-region' ); ?>" name="<?php esc_attr_e( 'ccb_settings[s3][field-s3-region]' ); ?>" class="output-select">
+        <?php foreach ($default_sets['s3_regions'] as $region => $regionLabel ) : ?>
+            <option value="<?php esc_attr_e( $region ); ?>" <?php selected( $s3['field-s3-region'], $region ); ?>><?php esc_attr_e( $regionLabel ); ?></option>
+        <?php endforeach; ?>
+    </select>
+    <p class="description">
+        Please select the region of your bucket
+    </p>
+    <?php if ( strcmp( $settings['field-output'], 'blob' ) == 0 ) : ?>
+        <p>Upload Max Filesize: <code><?php echo ini_get( 'upload_max_filesize' ); ?></code></p>
+        <p>Post Max Size: <code><?php echo ini_get( 'post_max_size' ); ?></code></p>
+    <?php endif; ?>
+
+<?php endif; ?>
+
 <?php if ( 'ccb_field-s3-bucket' == $field['label_for'] ) : ?>
 
     <input id="<?php esc_attr_e( 'ccb_field-s3-bucket' ); ?>" name="<?php esc_attr_e( 'ccb_settings[s3][field-s3-bucket]' ); ?>" class="regular-text" value="<?php esc_attr_e( $s3['field-s3-bucket'] ); ?>" />

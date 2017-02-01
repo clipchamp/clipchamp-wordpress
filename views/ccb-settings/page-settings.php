@@ -2,7 +2,7 @@
 	<div id="icon-options-general" class="icon32"><br /></div>
     <div id="branding">
         <a href="https://clipchamp.com" target="_blank" class="logo"><img src="<?php echo plugins_url( 'images/logo.svg', dirname( dirname( __FILE__ ) ) ); ?>" alt="Clipchamp" /></a>
-        <a href="https://clipchamp.com/pricing" target="_blank" class="btn">Sign up for the Clipchamp API</a>
+        <?php if (esc_attr_e( $settings['general']['field-apiKey'] )): ?><a href="https://clipchamp.com/pricing" target="_blank" class="btn">Sign up for the Clipchamp API</a><?php endif; ?>
     </div>
     <h1><?php esc_html_e( CCB_NAME ); ?> Settings</h1>
 
@@ -20,6 +20,7 @@
             <a href="?page=ccb_settings&tab=appearance_settings" class="nav-tab <?php echo $active_tab == 'appearance_settings' ? 'nav-tab-active' : ''; ?>">Appearance</a>
             <a href="?page=ccb_settings&tab=video_settings" class="nav-tab <?php echo $active_tab == 'video_settings' ? 'nav-tab-active' : ''; ?>">Video</a>
             <a href="?page=ccb_settings&tab=behaviour_settings" class="nav-tab <?php echo $active_tab == 'behaviour_settings' ? 'nav-tab-active' : ''; ?>">Behaviour</a>
+            <a href="?page=ccb_settings&tab=posts_settings" class="nav-tab <?php echo $active_tab == 'posts_settings' ? 'nav-tab-active' : ''; ?>">Posts</a>
         </h2>
 
         <?php if ( strcmp( $active_tab, 'appearance_settings' ) == 0 ) : ?>
@@ -44,6 +45,10 @@
 
         <?php if ( strcmp( $active_tab, 'behaviour_settings' ) == 0 ) : ?>
             <?php do_settings_sections( 'ccb_settings_behaviour' ); ?>
+        <?php endif; ?>
+
+        <?php if ( strcmp( $active_tab, 'posts_settings' ) == 0 ) : ?>
+            <?php do_settings_sections( 'ccb_settings_posts' ); ?>
         <?php endif; ?>
 
 		<p class="submit">

@@ -66,6 +66,8 @@ if ( ccb_requirements_met() ) {
 	require_once(__DIR__ . '/classes/clipchamp.php');
 	require_once( __DIR__ . '/includes/admin-notice-helper/admin-notice-helper.php' );
 	require_once(__DIR__ . '/classes/ccb-settings.php');
+    require_once(__DIR__ . '/classes/ccb-custom-post-type.php');
+	require_once(__DIR__ . '/classes/ccb-video-post-type.php');
 	require_once(__DIR__ . '/classes/ccb-shortcode.php');
 	require_once(__DIR__ . '/classes/ccb-instance-class.php');
 

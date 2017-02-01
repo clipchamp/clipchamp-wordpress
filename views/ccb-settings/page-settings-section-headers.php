@@ -10,6 +10,10 @@
 
 	<p>Everything related to the video magic happening.</p>
 
+<?php elseif ( 'ccb_section-posts' == $section['id'] ) : ?>
+
+    <p>Settings for the posts</p>
+
 <?php elseif ( 'ccb_section-s3' == $section['id'] ) : ?>
 
 	<p>Configuration elements when using Amazon S3 upload target. (<a href="https://blog.clipchamp.com/uploading-videos-from-clipchamp-button-to-aws-s3" target="_blank">configuration instructions for S3</a>)</p>
