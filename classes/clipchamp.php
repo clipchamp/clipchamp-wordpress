@@ -11,7 +11,7 @@ if ( ! class_exists('Clipchamp') ) {
 		protected static $writeable_properties = array();
 		protected $modules;
 
-		const VERSION    = '0.5.3';
+		const VERSION    = '1.5.0';
 		const PREFIX     = 'ccb_';
 		const DEBUG_MODE = false;
 
