@@ -65,7 +65,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
                     if ( !empty( $local[$key] ) && strpos( $local[$key], ',' ) ) {
                         $local[$key] = explode( ',', $local[$key] );
                     }
-                    if ( $local[$key] && ! empty( $local[$key] ) ) {
+                    if ( $local && $local[$key] && ! empty( $local[$key] ) ) {
                         $value = $local[$key];
                     }
                     if ( ( ! is_array( $value ) && ! empty( $value ) ) || ( is_array( $value ) && ! empty( $value[0] ) ) ) {

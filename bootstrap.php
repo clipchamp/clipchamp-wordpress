@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'CCB_NAME',                 'Clipchamp' );
 define( 'CCB_REQUIRED_PHP_VERSION', '5.3' );                          // because of get_called_class()
-define( 'CCB_REQUIRED_WP_VERSION',  '3.1' );                          // because of esc_textarea()
+define( 'CCB_REQUIRED_WP_VERSION',  '4.0' );                          // because of esc_textarea()
 
 /**
  * Checks if the system requirements are met
