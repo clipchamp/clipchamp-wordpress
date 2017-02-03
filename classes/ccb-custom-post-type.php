@@ -1,5 +1,5 @@
 <?php
-if ( ! interface_exists( 'CCB_Custom_Post_Type' ) ) {
+if ( ! interface_exists( 'cd ' ) ) {
     /**
      * Defines interface for custom post type classes
      */
