@@ -4,7 +4,7 @@ Donate link: https://clipchamp.com/pricing
 Tags: video upload, webcam recorder, video transcoding, video conversion, video compression
 Requires at least: 4.0.0
 Tested up to: 4.7.2
-Stable tag: 1.5.0
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,12 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 1. The Clipchamp button can be placed onto your pages and into posts by using a simple `[clipchamp]` short code as well.
 
 == Changelog ==
+
+= 1.5.2 =
+* Fixed issue with post category assignment when not logged in
+
+= 1.5.1 =
+* Bug fixes for PHP warnings
 
 = 1.5.0 =
 * Added custom post type for videos uploaded through the Clipchamp API

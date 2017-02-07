@@ -79,7 +79,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
                     $options .= '},';
                 }
             }
-            if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 || strcmp( $local['output'], 'blob' ) == 0 ) {
+            if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 || ( $local && strcmp( $local['output'], 'blob' ) == 0 ) ) {
                 $options .= 'onVideoCreated: ' . self::ON_VIDEO_CREATED . ',';
             }
             //$options .= 'onPreviewAvailable: ' . self::ON_PREVIEW_AVAILABLE . ',';

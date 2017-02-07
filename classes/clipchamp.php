@@ -11,7 +11,7 @@ if ( ! class_exists('Clipchamp') ) {
 		protected static $writeable_properties = array();
 		protected $modules;
 
-		const VERSION    = '1.4.9';
+		const VERSION    = '1.5.2';
 		const PREFIX     = 'ccb_';
 		const DEBUG_MODE = false;
 
@@ -212,6 +212,8 @@ if ( ! class_exists('Clipchamp') ) {
             );
 
             $post_id = wp_insert_post( apply_filters( 'cbb_video', $post_arr ) );
+
+            wp_set_object_terms( $post_id, (int)$this->modules['CCB_Settings']->settings['posts']['field-post-category'], 'category' );
 
             exit( $post_id );
         }
