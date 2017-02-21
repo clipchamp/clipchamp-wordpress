@@ -12,8 +12,10 @@ if ( ! class_exists('CCB_Shortcode') ) {
 
         const SHORTCODE_TAG         = 'clipchamp';
         const SCRIPT_HANDLE         = 'clipchamp-button';
+        const PLUGIN_SCRIPT_HANDLE  = 'clipchamp-plugin';
         const SCRIPT_BASE_URL       = 'https://api.clipchamp.com/';
         const SCRIPT_FILE_NAME      = 'button.js';
+        const ON_METADATA_AVAILABLE = 'ccbMetadataAvailable';
         const ON_PREVIEW_AVAILABLE  = 'ccbPreviewAvailable';
         const ON_VIDEO_CREATED      = 'ccbUploadVideo';
         const ON_UPLOAD_COMPLETE    = 'ccbUploadComplete';
@@ -82,7 +84,8 @@ if ( ! class_exists('CCB_Shortcode') ) {
             if ( strcmp( self::$settings['video']['field-output'], 'blob' ) == 0 || ( $local && strcmp( $local['output'], 'blob' ) == 0 ) ) {
                 $options .= 'onVideoCreated: ' . self::ON_VIDEO_CREATED . ',';
             }
-            //$options .= 'onPreviewAvailable: ' . self::ON_PREVIEW_AVAILABLE . ',';
+            $options .= 'onMetadataAvailable: ' . self::ON_METADATA_AVAILABLE . ',';
+            $options .= 'onPreviewAvailable: ' . self::ON_PREVIEW_AVAILABLE . ',';
             $options .= 'onUploadComplete: ' . self::ON_UPLOAD_COMPLETE . ',';
             $options = substr( $options, 0, -1 );
             $options .= '};';
@@ -102,6 +105,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
                 return 'You need to enter your API key to use Clipchamp';
             }
 
+            wp_enqueue_script( self::PLUGIN_SCRIPT_HANDLE );
             wp_enqueue_script( self::SCRIPT_HANDLE );
             if ( !self::$ajax_init ) {
                 wp_localize_script(
@@ -112,14 +116,28 @@ if ( ! class_exists('CCB_Shortcode') ) {
                 self::$ajax_init = true;
             }
 
-            //$locale = get_locale();
-
             //TODO:Validate attributes
             $attributes = apply_filters( 'ccb_shortcode-attributes', $attributes );
 
             $jsScript = self::create_button_options( $attributes );
             $jsScript .= 'var element' . self::$id . ' = document.getElementById("clipchamp-button-' . self::$id . '");';
             $jsScript .= 'clipchamp(element' . self::$id . ', options' . self::$id . ');';
+
+            if ( self::$id === 1 ) {
+                // before upload
+                if ( isset( self::$settings['posts'], self::$settings['posts']['field-before-create-hook'] ) || has_filter( 'ccb_before-create-hook' ) ) {
+                    $jsScript .= 'ccbBeforeCreateHook = function(data) { ';
+                    $jsScript .= apply_filters( 'ccb_before-create-hook', self::$settings['posts']['field-before-create-hook'] );
+                    $jsScript .= '};';
+                }
+                // after upload
+                if ( isset( self::$settings['posts'], self::$settings['posts']['field-after-create-hook'] ) || has_filter( 'ccb_after-create-hook' ) ) {
+                    $jsScript .= 'ccbAfterCreateHook = function() {';
+                    $jsScript .= apply_filters( 'ccb_after-create-hook', self::$settings['posts']['field-after-create-hook'] );
+                    $jsScript .= '};';
+                }
+            }
+
             if ( function_exists( 'wp_add_inline_script' ) ) {
                 wp_add_inline_script( self::SCRIPT_HANDLE, $jsScript );
             } else {
@@ -159,7 +177,22 @@ if ( ! class_exists('CCB_Shortcode') ) {
          */
         public static function register_scripts() {
             $api_key = self::$settings['general']['field-apiKey'];
-            wp_register_script( self::SCRIPT_HANDLE, self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME, array(), Clipchamp::VERSION );
+
+            wp_register_script(
+                self::SCRIPT_HANDLE,
+                self::SCRIPT_BASE_URL . $api_key . '/' . self::SCRIPT_FILE_NAME,
+                array(),
+                Clipchamp::VERSION,
+                true
+            );
+
+            wp_register_script(
+                self::PLUGIN_SCRIPT_HANDLE,
+                plugins_url( 'javascript/button.js', dirname( __FILE__ ) ),
+                array( 'jquery' ),
+                Clipchamp::VERSION,
+                true
+            );
         }
 
         /**

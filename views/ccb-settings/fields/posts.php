@@ -41,3 +41,26 @@
     </p>
 
 <?php endif; ?>
+
+<?php if ( 'ccb_field-before-create-hook' == $field['label_for'] ) : ?>
+
+    <textarea id="<?php esc_attr_e( 'ccb_field-before-create-hook' ); ?>" name="<?php esc_attr_e( 'ccb_settings[posts][field-before-create-hook]' ); ?>" rows="10" class="codemirror"><?php esc_attr_e( $settings['field-before-create-hook'] ) ?></textarea>
+    <p class="description">
+        The JavaScript code you specify here will be executed before a video post is created. You have access to the <code>data</code>
+        variable, which includes information about the uploaded video. You can add WordPress post parameters to the data
+        variable to store them with the video post (see
+        <a href="https://developer.wordpress.org/reference/functions/wp_insert_post/" target="_blank">WordPress Code
+            Reference</a>). Please always end your custom code with <code>return data;</code>.
+    </p>
+
+<?php endif; ?>
+
+<?php if ( 'ccb_field-after-create-hook' == $field['label_for'] ) : ?>
+
+    <textarea id="<?php esc_attr_e( 'ccb_field-after-create-hook' ); ?>" name="<?php esc_attr_e( 'ccb_settings[posts][field-after-create-hook]' ); ?>" rows="10" class="codemirror"><?php esc_attr_e( $settings['field-after-create-hook'] ) ?></textarea>
+    <p class="description">
+        The JavaScript code you specify here will be executed after a video post is created. You have access to the <code>postId</code>,
+        <code>videoData</code> and <code>image</code> variables.
+    </p>
+
+<?php endif; ?>

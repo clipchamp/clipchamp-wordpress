@@ -76,7 +76,7 @@ if ( ! class_exists( 'CCB_Video_Post_Type' ) ) {
                     'slug' => 'videos'
                 ),
                 'query_var'            => false,
-                'supports'             => array( 'title', 'editor', 'author', 'thumbnail', 'revisions', 'comments' )
+                'supports'             => array( 'title', 'editor', 'author', 'thumbnail', 'revisions', 'comments', 'excerpt' )
             );
             return apply_filters( 'wpps_post-type-params', $post_type_params );
         }

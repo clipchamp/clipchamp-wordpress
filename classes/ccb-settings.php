@@ -233,7 +233,9 @@ if ( ! class_exists('CCB_Settings') ) {
             $posts = array(
                 'field-show-with-posts'     => false,
                 'field-post-status'         => 'pending',
-                'field-post-category'       => 1
+                'field-post-category'       => 1,
+                'field-before-create-hook'  => '',
+                'field-after-create-hook'   => ''
             );
 
 			$s3 = array(
@@ -669,6 +671,24 @@ if ( ! class_exists('CCB_Settings') ) {
                 array( 'label_for' => 'ccb_field-post-category' )
             );
 
+            add_settings_field(
+                'ccb_field-before-create-hook',
+                'Before Create Hook',
+                array( $this, 'markup_posts_fields' ),
+                'ccb_settings_posts',
+                'ccb_section-posts',
+                array( 'label_for' => 'ccb_field-before-create-hook' )
+            );
+
+            add_settings_field(
+                'ccb_field-after-create-hook',
+                'After Create Hook',
+                array( $this, 'markup_posts_fields' ),
+                'ccb_settings_posts',
+                'ccb_section-posts',
+                array( 'label_for' => 'ccb_field-after-create-hook' )
+            );
+
 
             register_setting(
                 'ccb_settings_appearance',
@@ -988,6 +1008,16 @@ if ( ! class_exists('CCB_Settings') ) {
                 $new_settings['posts']['field-show-with-posts'] = false;
             } else {
                 $new_settings['posts']['field-show-with-posts'] = true;
+            }
+
+            if ( ! empty( $new_settings['posts']['field-before-create-hook'] ) ) {
+                $function_wrap = '/function\s?\(.*\)\s?{\s*(\X*)\s*}\X*/';
+                $subst = '$1';
+                $new_settings['posts']['field-before-create-hook'] = preg_replace($function_wrap, $subst, $new_settings['posts']['field-before-create-hook']);
+                $has_return = '/\X*(return data;?)\X*/';
+                if ( preg_match( $has_return, $new_settings['posts']['field-before-create-hook'] ) !== 1 ) {
+                    $new_settings['posts']['field-before-create-hook'] .= "\n\n" . 'return data;';
+                }
             }
 
 			return $new_settings;

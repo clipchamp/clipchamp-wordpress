@@ -18,6 +18,15 @@ function ccbWrapper( $ ) {
             // Init color picker
             $( '.color-field' ).wpColorPicker();
 
+            // Init Codemirror
+            $('.codemirror').each(function() {
+                var options = {
+                    mode: 'javascript',
+                    lineNumbers: true
+                };
+                var myCodeMirror = CodeMirror.fromTextArea( this, options );
+            });
+
             ccb.registerEventHandlers();
 
             $( '.conditional-settings' ).hide();

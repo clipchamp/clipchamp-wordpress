@@ -11,7 +11,7 @@ if ( ! class_exists('Clipchamp') ) {
 		protected static $writeable_properties = array();
 		protected $modules;
 
-		const VERSION    = '1.5.2';
+		const VERSION    = '1.5.3';
 		const PREFIX     = 'ccb_';
 		const DEBUG_MODE = false;
 
@@ -46,18 +46,26 @@ if ( ! class_exists('Clipchamp') ) {
 		 * @mvc Controller
 		 */
 		public static function load_resources() {
-			wp_register_script(
-				self::PREFIX . 'button',
-				plugins_url( 'javascript/button.js', dirname( __FILE__ ) ),
-				array( 'jquery' ),
-				self::VERSION,
-				true
-			);
-
             wp_register_script(
                 self::PREFIX . 'admin-script',
                 plugins_url( 'javascript/admin-script.js', dirname( __FILE__ ) ),
-                array( 'wp-color-picker', 'jquery' ),
+                array( self::PREFIX . 'admin-codemirror-script', self::PREFIX . 'admin-codemirror-js-script', 'wp-color-picker', 'jquery' ),
+                self::VERSION,
+                true
+            );
+
+            wp_register_script(
+                self::PREFIX . 'admin-codemirror-script',
+                '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/codemirror.min.js',
+                array(),
+                self::VERSION,
+                true
+            );
+
+            wp_register_script(
+                self::PREFIX . 'admin-codemirror-js-script',
+                '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/mode/javascript/javascript.min.js',
+                array( self::PREFIX . 'admin-codemirror-script' ),
                 self::VERSION,
                 true
             );
@@ -70,14 +78,23 @@ if ( ! class_exists('Clipchamp') ) {
 				'all'
 			);
 
+
+			wp_register_style(
+			    self::PREFIX . 'admin-codemirror',
+                '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.24.0/codemirror.min.css',
+                array(),
+                self::VERSION,
+                'all'
+            );
+
 			if ( is_admin() ) {
                 wp_enqueue_media();
 				wp_enqueue_style( self::PREFIX . 'admin' );
                 wp_enqueue_style( 'wp-color-picker' );
+                wp_enqueue_style( self::PREFIX . 'admin-codemirror' );
                 wp_enqueue_script( self::PREFIX . 'admin-script' );
-			} else {
-				wp_enqueue_script( self::PREFIX . 'button' );
-                wp_enqueue_style( self::PREFIX . 'button' );
+                wp_enqueue_script( self::PREFIX . 'admin-codemirror-script' );
+                wp_enqueue_script( self::PREFIX . 'admin-codemirror-js-script' );
 			}
 		}
 
@@ -101,13 +118,6 @@ if ( ! class_exists('Clipchamp') ) {
 				}
 			}
 		}
-
-        /**
-         *
-         */
-        public static function preview_available() {
-
-        }
 
 		/**
 		 * Handles the file upload.
@@ -138,12 +148,41 @@ if ( ! class_exists('Clipchamp') ) {
 
 				wp_insert_attachment( $attachment, $video['file'], 0 );
 
-				exit( $video['url'] );
+				wp_die( $video['url'] );
 
 			} else {
-				exit( $video['error'] );
+                status_header(400);
+				wp_die( $video['error'] );
 			}
 		}
+
+        /**
+         * Handles the file upload.
+         *
+         * @mvc Controller
+         */
+        public static function upload_image() {
+            $post_id = esc_attr( $_POST['post_id'] );
+
+            if ( isset( $_POST['post_id'], $_FILES['image'] ) && current_user_can( 'edit_post', $post_id ) ) {
+                require_once( ABSPATH . 'wp-admin/includes/image.php' );
+                require_once( ABSPATH . 'wp-admin/includes/file.php' );
+                require_once( ABSPATH . 'wp-admin/includes/media.php' );
+
+                $thumbnail_id = media_handle_upload( 'image', $post_id );
+
+                if ( ! is_wp_error( $thumbnail_id ) ) {
+                    set_post_thumbnail( $post_id, $thumbnail_id );
+                    echo $thumbnail_id;
+                } else {
+                    status_header(500);
+                }
+            } else {
+                status_header(400);
+            }
+
+            wp_die();
+        }
 
         /**
          * Inserts a video post into the WordPress database after an upload is completed.
@@ -197,10 +236,15 @@ if ( ! class_exists('Clipchamp') ) {
                     break;
             }
 
-            $post_arr = array(
-                'post_title'        => apply_filters( 'cbb_video_name', $filename ),
+            if ( $data['post_content'] ) {
+                $data['post_content'] = '<p>' . $content . '</p><p>' . $data['post_content'] . '</p>';
+            }
+
+            $post_arr = shortcode_atts( array(
+                'post_title'        =>  $filename,
                 'post_type'         => CCB_Video_Post_Type::POST_TYPE_SLUG,
-                'post_content'      => apply_filters( 'cbb_video_content', $content ),
+                'post_content'      => $content,
+                'post_excerpt'      => '',
                 'post_status'       => $this->modules['CCB_Settings']->settings['posts']['field-post-status'],
                 'post_author'       => $user,
                 'tax_input'         => array(
@@ -209,13 +253,15 @@ if ( ! class_exists('Clipchamp') ) {
                 'meta_input'        => array(
                     'ccb_video-url' => $url
                 )
-            );
+            ), $data );
 
-            $post_id = wp_insert_post( apply_filters( 'cbb_video', $post_arr ) );
+            $post_id = wp_insert_post( $post_arr );
 
             wp_set_object_terms( $post_id, (int)$this->modules['CCB_Settings']->settings['posts']['field-post-category'], 'category' );
 
-            exit( $post_id );
+            echo $post_id;
+
+            wp_die();
         }
 
 
@@ -300,6 +346,8 @@ if ( ! class_exists('Clipchamp') ) {
 			add_action( 'wp_ajax_nopriv_ccb_upload',	        __CLASS__ . '::upload' );
             add_action( 'wp_ajax_ccb_upload_complete',			array( $this, 'upload_complete' ) );
             add_action( 'wp_ajax_nopriv_ccb_upload_complete',	array( $this, 'upload_complete' ) );
+            add_action( 'wp_ajax_ccb_upload_image',			    __CLASS__ . '::upload_image' );
+            add_action( 'wp_ajax_nopriv_ccb_upload_image',	    __CLASS__ . '::upload_image' );
 
 			add_action( 'init',							array( $this, 'init' ) );
 			add_action( 'init',							array( $this, 'upgrade' ), 11 );

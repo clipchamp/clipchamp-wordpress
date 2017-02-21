@@ -3,7 +3,7 @@
 Plugin Name: Clipchamp
 Plugin URI: https://clipchamp.com
 Description: Brings the Clipchamp API to your WordPress site.
-Version: 1.5.2
+Version: 1.5.3
 Author: Clipchamp Pty Ltd
 Author URI: https://clipchamp.com
 License: GPLv2
