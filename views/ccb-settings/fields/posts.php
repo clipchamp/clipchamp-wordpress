@@ -10,7 +10,7 @@
         <input id="<?php esc_attr_e( 'ccb_field-show-with-posts' ); ?>" name="<?php esc_attr_e( 'ccb_settings[posts][field-show-with-posts][]' ); ?>" type="checkbox" value="1" <?php checked( true, $settings['field-show-with-posts'] ); ?> />
     </p>
     <p class="description">
-        Show videos with normal posts (in blog roll, categories, archives...).
+        Include video posts in blog roll, categories etc.
     </p>
 
 <?php endif; ?>

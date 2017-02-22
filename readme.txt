@@ -79,6 +79,10 @@ Yes, it works across desktop and mobile versions of your website or web app and 
 
 == Changelog ==
 
+= 1.5.3 =
+* Post thumbnails will be automatically created for video posts
+* Before and after post created hooks available to inject custom JavaScript
+
 = 1.5.2 =
 * Fixed issue with post category assignment when not logged in
 
