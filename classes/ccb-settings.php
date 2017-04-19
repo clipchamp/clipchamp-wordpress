@@ -238,6 +238,10 @@ if ( ! class_exists('CCB_Settings') ) {
                 'field-after-create-hook'   => ''
             );
 
+            $camera = array(
+                'field-camera-limit'        => ''
+            );
+
 			$s3 = array(
 			    'field-s3-region'           => '',
 				'field-s3-bucket'			=> '',
@@ -265,6 +269,7 @@ if ( ! class_exists('CCB_Settings') ) {
 				'video'   		=> $video,
                 'behaviour'     => $behaviour,
 				'posts'         => $posts,
+				'camera'        => $camera,
 				's3'			=> $s3,
 				'azure'			=> $azure,
 				'gdrive'		=> $gdrive,
@@ -494,6 +499,25 @@ if ( ! class_exists('CCB_Settings') ) {
 				array( 'label_for' => 'ccb_field-output' )
 			);
 
+            /*
+             * Camera Section
+             */
+            add_settings_section(
+                'ccb_section-camera',
+                'Camera Settings',
+                __CLASS__ . '::markup_section_headers',
+                'ccb_settings_camera'
+            );
+
+            add_settings_field(
+                'ccb_field-camera-limit',
+                'Camera recording limit',
+                array( $this, 'markup_video_fields' ),
+                'ccb_settings_camera',
+                'ccb_section-camera',
+                array( 'label_for' => 'ccb_field-camera-limit' )
+            );
+
 			/*
 			 * S3 Section
 			 */
@@ -702,6 +726,12 @@ if ( ! class_exists('CCB_Settings') ) {
                 array( $this, 'validate_settings' )
             );
 
+            register_setting(
+                'ccb_settings_camera',
+                'ccb_settings_camera',
+                array( $this, 'validate_settings' )
+            );
+
 			register_setting(
 				'ccb_settings_s3',
 				'ccb_settings_s3',
@@ -813,6 +843,7 @@ if ( ! class_exists('CCB_Settings') ) {
                 'ccb-settings/fields/video.php',
                 array(
                     'settings'		=> $this->settings['video'],
+					'camera'        => $this->settings['camera'],
 					's3'			=> $this->settings['s3'],
 					'azure'			=> $this->settings['azure'],
 					'youtube'		=> $this->settings['youtube'],
@@ -1018,6 +1049,12 @@ if ( ! class_exists('CCB_Settings') ) {
                 if ( preg_match( $has_return, $new_settings['posts']['field-before-create-hook'] ) !== 1 ) {
                     $new_settings['posts']['field-before-create-hook'] .= "\n\n" . 'return data;';
                 }
+            }
+
+            if ( ! empty( $new_settings['posts']['field-after-create-hook'] ) ) {
+                $function_wrap = '/function\s?\(.*\)\s?{\s*(\X*)\s*}\X*/';
+                $subst = '$1';
+                $new_settings['posts']['field-after-create-hook'] = preg_replace($function_wrap, $subst, $new_settings['posts']['field-after-create-hook']);
             }
 
 			return $new_settings;

@@ -96,6 +96,13 @@
 
 <?php endif; ?>
 
+<?php if ( 'ccb_field-camera-limit' == $field['label_for'] ) : ?>
+
+    <input id="<?php esc_attr_e( 'ccb_field-camera-limit' ); ?>" name="<?php esc_attr_e( 'ccb_settings[camera][field-camera-limit]' ); ?>" class="regular-text" value="<?php esc_attr_e( $camera['field-camera-limit'] ); ?>" />
+    <p class="description">Limit camera recording length to a given number of seconds. The maximum length is limited by your plan and technical considerations.</p>
+
+<?php endif; ?>
+
 <?php
 /*
  * S3 Section

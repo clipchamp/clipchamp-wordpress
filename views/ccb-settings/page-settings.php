@@ -29,6 +29,7 @@
 
         <?php if ( strcmp( $active_tab, 'video_settings' ) == 0 ) : ?>
             <?php do_settings_sections( 'ccb_settings_video' ); ?>
+            <?php do_settings_sections( 'ccb_settings_camera' ); ?>
             <div id="s3_settings" class="conditional-settings">
                 <?php do_settings_sections( 'ccb_settings_s3' ); ?>
             </div>

@@ -48,7 +48,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
         protected static function create_button_options( $local ) {
             //TODO:Improve
             $not_show = array( 'general', 'posts' );
-            $do_wrap = array( 's3', 'youtube', 'gdrive', 'azure' );
+            $do_wrap = array( 's3', 'youtube', 'gdrive', 'azure', 'camera' );
             $options = 'var options' . self::$id . ' = {';
             foreach ( self::$settings as $s_key => $section ) {
                 if ( !is_array( $section ) || in_array( $s_key, $not_show ) ) {
@@ -132,7 +132,7 @@ if ( ! class_exists('CCB_Shortcode') ) {
                 }
                 // after upload
                 if ( isset( self::$settings['posts'], self::$settings['posts']['field-after-create-hook'] ) || has_filter( 'ccb_after-create-hook' ) ) {
-                    $jsScript .= 'ccbAfterCreateHook = function() {';
+                    $jsScript .= 'ccbAfterCreateHook = function(postId, videoData, image) {';
                     $jsScript .= apply_filters( 'ccb_after-create-hook', self::$settings['posts']['field-after-create-hook'] );
                     $jsScript .= '};';
                 }
