@@ -1,7 +1,7 @@
-=== Webcam Recorder, Video Converter & Video Uploader ===
+=== Video Recorder, Video Converter & Video Uploader ===
 Contributors: Clipchamp Pty Ltd
-Donate link: https://clipchamp.com/pricing
-Tags: video upload, webcam recorder, video transcoding, video conversion, video compression
+Donate link: https://clipchamp.com/en/pricing/api-access
+Tags: video uploader, webcam recorder, HTML5 camera, video converter, video compression
 Requires at least: 4.0.0
 Tested up to: 4.7.2
 Stable tag: trunk
@@ -13,24 +13,25 @@ Compress videos to up to 1/20th of the original size.
 
 == Description ==
 
-By adding the short code [clipchamp] to any of your WordPress posts or pages, you can collect videos from your website's visitors and let them record videos in the frontend of your site.
-
-That is, the Clipchamp Video Uploader and Webcam Recorder adds the features of the [Clipchamp API](https://clipchamp.com/api) to your WordPress-based website.
-
-Clipchamp compresses and converts user generated videos on the client into one of the supported video formats (MP4, WebM, WMV, FLV, GIF)
-and uploads them directly from your site visitors' device to an upload target you nominate - currently supported are Amazon S3, Microsoft Azure, Google Drive, YouTube and the WordPress Media Gallery.
+Collect videos and let users record webcam clips directly on your site. Simply add the short code [clipchamp] to any of your WordPress posts or pages, which embeds a recorder and video upload button wherever you like. Our HTML5 camera is based on the Clipchamp video API, bringing modern video recording, client-side transcoding and uploading to WordPress in one package - no Flash, no WebRTC.
 
 
-Unlike any other webcam recorder and video uploader, Clipchamp is based purely on HTML5, using the cutting-edge of modern web technologies. It also compresses all videos and converts them into 1 standard format of your choice *before* they get uploaded to you. This reduces or even eliminates the need for server-side transcoding and involved costs.
+Clipchamp is unique insofar as it compresses and converts user-generated videos on the client into one of the supported video formats (MP4, WebM, WMV, FLV) before files get uploadd to you. All videos get uploaded directly from your site visitors' devices to an upload target you choose without any detours through our servers for better privacy protection - we currently support direct uploads to Amazon S3, Microsoft Azure, Google Drive, YouTube and the WordPress Media Gallery.
+
+
+Unlike any other webcam recorder or video uploader, Clipchamp is entirely HTML5 & JavaScript, using the cutting-edge of modern web technologies. The client-side transcoding component reduces or even eliminates the need for server-side transcoding and involved costs, you receive video files that are streaming-ready and in a standard format.
 
 
 All user generated videos get sent directly to you and are neither processed on nor routed through Clipchamp servers, protecting your users' privacy. We [never have access](https://help.clipchamp.com/hc/en-us/articles/215476938-Does-Clipchamp-have-access-to-my-users-videos-) to your users' videos.
 
 
-For a more in-depth description of the Clipchamp WordPress plugin refer to the [Clipchamp help centre article](https://help.clipchamp.com/hc/en-us/articles/221755028-What-is-the-Clipchamp-Plugin-for-WordPress-).
+Our Video Uploader and HTML5 webcam recorder is based on our [video API](https://clipchamp.com/en/api) and brings its features to WordPress.
 
 
-The source code of this plugin is available in [Clipchamp's Github repository](github.com/clipchamp/clipchamp-wordpress).
+For a more in-depth description of the Clipchamp WordPress plugin please refer to the [Clipchamp help centre article](https://help.clipchamp.com/hc/en-us/articles/221755028-What-is-the-Clipchamp-Plugin-for-WordPress-).
+
+
+The source code of the plugin is available in [Clipchamp's Github repository](github.com/clipchamp/clipchamp-wordpress).
 
 == Installation ==
 
@@ -39,7 +40,7 @@ This section describes how to install and set up the Video Uploader and Webcam R
 
 1. Upload the plugin files to the `/wp-content/plugins/clipchamp` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Go to the [Clipchamp API pricing page](https://clipchamp.com/pricing/api-access) to subscribe to a plan (all include a free trial period)
+3. Go to the [Clipchamp API pricing page](https://clipchamp.com/en/pricing/api-access) to subscribe to a plan (all include a free trial period)
 4. Use the Settings->Clipchamp screen to configure the plugin
 5. Copy the API key from your [Clipchamp publisher portal](https://clipchamp.com/api-settings) and paste it into the respective field on the Settings->Clipchamp screen
 
@@ -62,7 +63,7 @@ No, all videos your users create get processed on your website visitors' devices
 
 = Is the Clipchamp technology purely based on HTML5? =
 
-Yes, your users do not require Adobe Flash or other technologies for Clipchamp to work on their devices when visiting your website.
+Yes, your users do not require Flash or other technologies for Clipchamp to work on their devices when visiting your website. The plugin uses HTML5 and JavaScript.
 
 = Does this plugin work on mobile devices? =
 
