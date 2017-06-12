@@ -44,7 +44,7 @@ For additional setup tips and more information please refer to [our help centre 
 
 This plugin lets you collect user generated videos. It embeds a button on your WordPress-based website that your visitors can click to either 1) record videos and upload to you or 2) upload video files they already have on their device. The plugin comes with a number of resolution (incl. 480p, 720p, 1080p), format (incl. MP4 and WebM) and compression (5 levels) options.
 
-= How is the Clipchamp Video Uploader and Webcam recorder plugin different from a plain file uploader? =
+= How is it different from a plain file uploader? =
 
 Your users' video files get compressed & converted on the client before they get uploaded to you. As a result, you'll get much smaller files in 1 standard format of your choice (MP4, WebM, FLV,...). This dramatically reduces or even eliminates the huge costs involved in server-side video transcoding.
 
