@@ -1,7 +1,13 @@
 # Clipchamp Plugin for WordPress
-WordPress plugin for the [Clipchamp API](https://clipchamp.com/pricing).
+WordPress plugin to enable the [Clipchamp video API](https://clipchamp.com/en/api) in WordPress.
 
 ## What is the Clipchamp API? ##
+
+The Clipchamp API lets you embed a webcam recorder on your website so that visitors can record & upload videos to you. 
+
+It comes with a number of resolution, format and video compression options. Your users' video files get transcoded on the client before they get uploaded to you. You'll get smaller files - which upload faster - in 1 standard format of your choice (MP4, WebM, FLV,...). 
+
+This reduces or even eliminates costs involved in server-side video transcoding. It works in desktop and mobile browsers and users can also upload videos they already have on their device.
 
 ## Installation ##
 
@@ -17,5 +23,5 @@ WordPress plugin for the [Clipchamp API](https://clipchamp.com/pricing).
    ```
 1. Upload the zip file to your WordPress blog (Plugins -> Add New -> Upload Plugin).
 1. Install the plugin and activate it.
-1. If you don't have a Clipchamp API key yet, [subscribe to a Clipchamp plan](https://clipchamp.com/pricing).
-1. Copy and paste your API key into the respective field in the Clipchamp settings (Settings -> Clipchamp).
+1. If you don't have an API key yet, [subscribe to a free trial](https://clipchamp.com/en/pricing/api-access).
+1. Copy and paste your API key into the respective field in the plugin settings (Settings -> Clipchamp).
