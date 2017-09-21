@@ -1,7 +1,7 @@
 === Video Recorder, Video Converter & Video Uploader ===
 Contributors: Clipchamp Pty Ltd
 Donate link: https://clipchamp.com/en/pricing/api-access
-Tags: video uploader, webcam recorder, HTML5 camera, video converter, video compression
+Tags: webcam recorder, video camera, video uploader, video converter, webcam
 Requires at least: 4.0.0
 Tested up to: 4.7.2
 Stable tag: trunk
